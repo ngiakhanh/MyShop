@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{815E3A8E-9D25-4C4F-A89F-512B9A1D3062}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Models_Controllers</RootNamespace>
+    <AssemblyName>Models-Controllers</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseModel.cs" />
+    <Compile Include="Entity\Advertise.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Company.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Contact.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Customer.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\GroupProduct.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Menu.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\MyShopDb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyShopDb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\MyShopDb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\MyShopDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyShopDb.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Order.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\OrderDetail.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Product.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Province.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Shop.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Advertise_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Advertise_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Company_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Company_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Contact_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Contact_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Customers_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Customers_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_GroupProduct_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_GroupProduct_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Menu_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Menu_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_OrderDetail_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_OrderDetail_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Order_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Product_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Product_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Province_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Province_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Shop_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Shop_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Support_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Support_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Users_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Users_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Support.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\User.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Entity\MyShopDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MyShopDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="App.Config" />
+    <None Include="Entity\MyShopDb.edmx.diagram">
+      <DependentUpon>MyShopDb.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Entity\MyShopDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MyShopDb.edmx</DependentUpon>
+      <LastGenOutput>MyShopDb.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Entity\MyShopDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MyShopDb.edmx</DependentUpon>
+      <LastGenOutput>MyShopDb.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
