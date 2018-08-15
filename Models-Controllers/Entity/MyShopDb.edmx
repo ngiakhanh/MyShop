@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="IMIC_SHOPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MyShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Advertise">
           <Key>
             <PropertyRef Name="Id" />
@@ -19,7 +19,7 @@
           <Property Name="Postion" Type="int" />
           <Property Name="Order" Type="int" />
           <Property Name="Status" Type="int" />
-          <Property Name="isDel" Type="bit" Nullable="false" />
+          <Property Name="isDel" Type="bit" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -30,7 +30,7 @@
           <Property Name="Address" Type="ntext" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="Fax" Type="varchar" MaxLength="20" />
-          <Property Name="isDel" Type="bit" Nullable="false" />
+          <Property Name="isDel" Type="bit" />
         </EntityType>
         <EntityType Name="Contact">
           <Key>
@@ -359,9 +359,9 @@
         </Function>
         <Function Name="SP_Menu_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
-          <Parameter Name="Order_Id" Type="int" Mode="In" />
-          <Parameter Name="Product_Id" Type="int" Mode="In" />
-          <Parameter Name="Quantity" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="Link" Type="nvarchar" Mode="In" />
+          <Parameter Name="Order" Type="int" Mode="In" />
           <Parameter Name="ParentId" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
@@ -372,7 +372,21 @@
           <Parameter Name="Status" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
+        <Function Name="SP_Order_deleteTemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_Order_getElements" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_Order_getElementsbyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_Order_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Customer_Id" Type="int" Mode="In" />
+          <Parameter Name="TotalMoney" Type="float" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="Status" Type="int" Mode="In" />
+          <Parameter Name="isDel" Type="bit" Mode="In" />
+        </Function>
         <Function Name="SP_OrderDetail_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Order_Id" Type="int" Mode="In" />
           <Parameter Name="Product_Id" Type="int" Mode="In" />
@@ -513,7 +527,7 @@
           <Parameter Name="Status" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
-        <EntityContainer Name="IMIC_SHOPModelStoreContainer">
+        <EntityContainer Name="MyShopModelStoreContainer">
           <EntitySet Name="Advertise" EntityType="Self.Advertise" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
@@ -548,7 +562,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="IMIC_SHOPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="MyShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Advertise">
           <Key>
             <PropertyRef Name="Id" />
@@ -563,7 +577,7 @@
           <Property Name="Postion" Type="Int32" />
           <Property Name="Order" Type="Int32" />
           <Property Name="Status" Type="Int32" />
-          <Property Name="isDel" Type="Boolean" Nullable="false" />
+          <Property Name="isDel" Type="Boolean" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
@@ -574,7 +588,7 @@
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Fax" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="isDel" Type="Boolean" Nullable="false" />
+          <Property Name="isDel" Type="Boolean" />
         </EntityType>
         <EntityType Name="Contact">
           <Key>
@@ -763,7 +777,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="IMIC_SHOPEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="MyShopDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Advertises" EntityType="Self.Advertise" />
           <EntitySet Name="Companies" EntityType="Self.Company" />
           <EntitySet Name="Contacts" EntityType="Self.Contact" />
@@ -808,8 +822,8 @@
           <FunctionImport Name="SP_Advertise_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Advertise_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Advertise_getElements_Result)" />
-          <FunctionImport Name="SP_Advertise_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Advertise_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Advertise_getElements" ReturnType="Collection(MyShopModel.SP_Advertise_getElements_Result)" />
+          <FunctionImport Name="SP_Advertise_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Advertise_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Advertise_Update">
@@ -835,8 +849,8 @@
           <FunctionImport Name="SP_Company_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Company_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Company_getElements_Result)" />
-          <FunctionImport Name="SP_Company_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Company_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Company_getElements" ReturnType="Collection(MyShopModel.SP_Company_getElements_Result)" />
+          <FunctionImport Name="SP_Company_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Company_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Company_Update">
@@ -860,8 +874,8 @@
           <FunctionImport Name="SP_Contact_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Contact_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Contact_getElements_Result)" />
-          <FunctionImport Name="SP_Contact_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Contact_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Contact_getElements" ReturnType="Collection(MyShopModel.SP_Contact_getElements_Result)" />
+          <FunctionImport Name="SP_Contact_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Contact_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Contact_Update">
@@ -887,8 +901,8 @@
           <FunctionImport Name="SP_Customers_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Customers_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Customers_getElements_Result)" />
-          <FunctionImport Name="SP_Customers_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Customers_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Customers_getElements" ReturnType="Collection(MyShopModel.SP_Customers_getElements_Result)" />
+          <FunctionImport Name="SP_Customers_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Customers_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Customers_Update">
@@ -912,8 +926,8 @@
           <FunctionImport Name="SP_GroupProduct_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_GroupProduct_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_GroupProduct_getElements_Result)" />
-          <FunctionImport Name="SP_GroupProduct_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_GroupProduct_getElementsbyId_Result)">
+          <FunctionImport Name="SP_GroupProduct_getElements" ReturnType="Collection(MyShopModel.SP_GroupProduct_getElements_Result)" />
+          <FunctionImport Name="SP_GroupProduct_getElementsbyId" ReturnType="Collection(MyShopModel.SP_GroupProduct_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_GroupProduct_Update">
@@ -935,15 +949,15 @@
           <FunctionImport Name="SP_Menu_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Menu_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Menu_getElements_Result)" />
-          <FunctionImport Name="SP_Menu_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Menu_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Menu_getElements" ReturnType="Collection(MyShopModel.SP_Menu_getElements_Result)" />
+          <FunctionImport Name="SP_Menu_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Menu_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Menu_Update">
             <Parameter Name="Id" Mode="In" Type="Int32" />
-            <Parameter Name="Order_Id" Mode="In" Type="Int32" />
-            <Parameter Name="Product_Id" Mode="In" Type="Int32" />
-            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Link" Mode="In" Type="String" />
+            <Parameter Name="Order" Mode="In" Type="Int32" />
             <Parameter Name="ParentId" Mode="In" Type="Int32" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
@@ -954,7 +968,21 @@
             <Parameter Name="Status" Mode="In" Type="Int32" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <FunctionImport Name="SP_Order_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Order_getElements_Result)" />
+          <FunctionImport Name="SP_Order_deleteTemp">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Order_getElements" ReturnType="Collection(MyShopModel.SP_Order_getElements_Result)" />
+          <FunctionImport Name="SP_Order_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Order_getElementsbyId_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Order_Update">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Customer_Id" Mode="In" Type="Int32" />
+            <Parameter Name="TotalMoney" Mode="In" Type="Double" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Status" Mode="In" Type="Int32" />
+            <Parameter Name="isDel" Mode="In" Type="Boolean" />
+          </FunctionImport>
           <FunctionImport Name="SP_OrderDetail_Create">
             <Parameter Name="Order_Id" Mode="In" Type="Int32" />
             <Parameter Name="Product_Id" Mode="In" Type="Int32" />
@@ -964,8 +992,8 @@
           <FunctionImport Name="SP_OrderDetail_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_OrderDetail_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_OrderDetail_getElements_Result)" />
-          <FunctionImport Name="SP_OrderDetail_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_OrderDetail_getElementsbyId_Result)">
+          <FunctionImport Name="SP_OrderDetail_getElements" ReturnType="Collection(MyShopModel.SP_OrderDetail_getElements_Result)" />
+          <FunctionImport Name="SP_OrderDetail_getElementsbyId" ReturnType="Collection(MyShopModel.SP_OrderDetail_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_OrderDetail_Update">
@@ -990,8 +1018,8 @@
           <FunctionImport Name="SP_Product_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Product_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Product_getElements_Result)" />
-          <FunctionImport Name="SP_Product_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Product_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Product_getElements" ReturnType="Collection(MyShopModel.SP_Product_getElements_Result)" />
+          <FunctionImport Name="SP_Product_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Product_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Product_Update">
@@ -1014,8 +1042,8 @@
           <FunctionImport Name="SP_Province_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Province_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Province_getElements_Result)" />
-          <FunctionImport Name="SP_Province_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Province_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Province_getElements" ReturnType="Collection(MyShopModel.SP_Province_getElements_Result)" />
+          <FunctionImport Name="SP_Province_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Province_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Province_Update">
@@ -1033,8 +1061,8 @@
           <FunctionImport Name="SP_Shop_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Shop_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Shop_getElements_Result)" />
-          <FunctionImport Name="SP_Shop_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Shop_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Shop_getElements" ReturnType="Collection(MyShopModel.SP_Shop_getElements_Result)" />
+          <FunctionImport Name="SP_Shop_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Shop_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Shop_Update">
@@ -1057,8 +1085,8 @@
           <FunctionImport Name="SP_Support_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Support_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Support_getElements_Result)" />
-          <FunctionImport Name="SP_Support_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Support_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Support_getElements" ReturnType="Collection(MyShopModel.SP_Support_getElements_Result)" />
+          <FunctionImport Name="SP_Support_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Support_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Support_Update">
@@ -1082,8 +1110,8 @@
           <FunctionImport Name="SP_Users_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Users_getElements" ReturnType="Collection(IMIC_SHOPModel.SP_Users_getElements_Result)" />
-          <FunctionImport Name="SP_Users_getElementsbyId" ReturnType="Collection(IMIC_SHOPModel.SP_Users_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Users_getElements" ReturnType="Collection(MyShopModel.SP_Users_getElements_Result)" />
+          <FunctionImport Name="SP_Users_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Users_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Users_Update">
@@ -1107,7 +1135,7 @@
           <Property Type="Int32" Name="Postion" Nullable="true" />
           <Property Type="Int32" Name="Order" Nullable="true" />
           <Property Type="Int32" Name="Status" Nullable="true" />
-          <Property Type="Boolean" Name="isDel" Nullable="false" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Advertise_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1120,7 +1148,7 @@
           <Property Type="Int32" Name="Postion" Nullable="true" />
           <Property Type="Int32" Name="Order" Nullable="true" />
           <Property Type="Int32" Name="Status" Nullable="true" />
-          <Property Type="Boolean" Name="isDel" Nullable="false" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Company_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1128,7 +1156,7 @@
           <Property Type="String" Name="Address" Nullable="true" MaxLength="Max" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Fax" Nullable="true" MaxLength="20" />
-          <Property Type="Boolean" Name="isDel" Nullable="false" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Company_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1136,7 +1164,7 @@
           <Property Type="String" Name="Address" Nullable="true" MaxLength="Max" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Fax" Nullable="true" MaxLength="20" />
-          <Property Type="Boolean" Name="isDel" Nullable="false" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Contact_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1215,6 +1243,14 @@
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Order_getElements_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Customer_Id" Nullable="true" />
+          <Property Type="Double" Name="TotalMoney" Nullable="true" />
+          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_Order_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="Int32" Name="Customer_Id" Nullable="true" />
           <Property Type="Double" Name="TotalMoney" Nullable="true" />
@@ -1331,9 +1367,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="IMIC_SHOPModelStoreContainer" CdmEntityContainer="IMIC_SHOPEntities">
+        <EntityContainerMapping StorageEntityContainer="MyShopModelStoreContainer" CdmEntityContainer="MyShopDbEntities">
           <EntitySetMapping Name="Advertises">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Advertise">
+            <EntityTypeMapping TypeName="MyShopModel.Advertise">
               <MappingFragment StoreEntitySet="Advertise">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1350,7 +1386,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Company">
+            <EntityTypeMapping TypeName="MyShopModel.Company">
               <MappingFragment StoreEntitySet="Company">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1362,7 +1398,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Contacts">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Contact">
+            <EntityTypeMapping TypeName="MyShopModel.Contact">
               <MappingFragment StoreEntitySet="Contact">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1377,7 +1413,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Customer">
+            <EntityTypeMapping TypeName="MyShopModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1391,7 +1427,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GroupProducts">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.GroupProduct">
+            <EntityTypeMapping TypeName="MyShopModel.GroupProduct">
               <MappingFragment StoreEntitySet="GroupProduct">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1404,7 +1440,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Menus">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Menu">
+            <EntityTypeMapping TypeName="MyShopModel.Menu">
               <MappingFragment StoreEntitySet="Menu">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1416,7 +1452,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Order">
+            <EntityTypeMapping TypeName="MyShopModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
@@ -1428,7 +1464,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.OrderDetail">
+            <EntityTypeMapping TypeName="MyShopModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
@@ -1439,7 +1475,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Product">
+            <EntityTypeMapping TypeName="MyShopModel.Product">
               <MappingFragment StoreEntitySet="Product">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1456,7 +1492,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Provinces">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Province">
+            <EntityTypeMapping TypeName="MyShopModel.Province">
               <MappingFragment StoreEntitySet="Province">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1465,7 +1501,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Shops">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Shop">
+            <EntityTypeMapping TypeName="MyShopModel.Shop">
               <MappingFragment StoreEntitySet="Shop">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1477,7 +1513,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Supports">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.Support">
+            <EntityTypeMapping TypeName="MyShopModel.Support">
               <MappingFragment StoreEntitySet="Support">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1491,7 +1527,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="IMIC_SHOPModel.User">
+            <EntityTypeMapping TypeName="MyShopModel.User">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1503,11 +1539,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_Advertise_Create" FunctionName="IMIC_SHOPModel.Store.SP_Advertise_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Advertise_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Advertise_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Advertise_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Advertise_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Advertise_Create" FunctionName="MyShopModel.Store.SP_Advertise_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Advertise_deleteTemp" FunctionName="MyShopModel.Store.SP_Advertise_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Advertise_getElements" FunctionName="MyShopModel.Store.SP_Advertise_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Advertise_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Advertise_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
@@ -1522,9 +1558,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Advertise_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Advertise_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Advertise_getElementsbyId" FunctionName="MyShopModel.Store.SP_Advertise_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Advertise_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Advertise_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
@@ -1539,12 +1575,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Advertise_Update" FunctionName="IMIC_SHOPModel.Store.SP_Advertise_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Company_Create" FunctionName="IMIC_SHOPModel.Store.SP_Company_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Company_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Company_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Company_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Company_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Advertise_Update" FunctionName="MyShopModel.Store.SP_Advertise_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Company_Create" FunctionName="MyShopModel.Store.SP_Company_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Company_deleteTemp" FunctionName="MyShopModel.Store.SP_Company_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Company_getElements" FunctionName="MyShopModel.Store.SP_Company_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Company_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Company_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
@@ -1554,9 +1590,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Company_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Company_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Company_getElementsbyId" FunctionName="MyShopModel.Store.SP_Company_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Company_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Company_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
@@ -1566,12 +1602,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Company_Update" FunctionName="IMIC_SHOPModel.Store.SP_Company_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Contact_Create" FunctionName="IMIC_SHOPModel.Store.SP_Contact_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Contact_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Contact_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Contact_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Contact_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Company_Update" FunctionName="MyShopModel.Store.SP_Company_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Contact_Create" FunctionName="MyShopModel.Store.SP_Contact_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Contact_deleteTemp" FunctionName="MyShopModel.Store.SP_Contact_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Contact_getElements" FunctionName="MyShopModel.Store.SP_Contact_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Contact_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Contact_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
@@ -1584,9 +1620,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Contact_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Contact_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Contact_getElementsbyId" FunctionName="MyShopModel.Store.SP_Contact_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Contact_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Contact_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
@@ -1599,12 +1635,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Contact_Update" FunctionName="IMIC_SHOPModel.Store.SP_Contact_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Customers_Create" FunctionName="IMIC_SHOPModel.Store.SP_Customers_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Customers_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Customers_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Customers_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Customers_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Contact_Update" FunctionName="MyShopModel.Store.SP_Contact_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Customers_Create" FunctionName="MyShopModel.Store.SP_Customers_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Customers_deleteTemp" FunctionName="MyShopModel.Store.SP_Customers_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Customers_getElements" FunctionName="MyShopModel.Store.SP_Customers_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Customers_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Customers_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
@@ -1616,9 +1652,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Customers_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Customers_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Customers_getElementsbyId" FunctionName="MyShopModel.Store.SP_Customers_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Customers_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Customers_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
@@ -1630,12 +1666,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Customers_Update" FunctionName="IMIC_SHOPModel.Store.SP_Customers_Update" />
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Create" FunctionName="IMIC_SHOPModel.Store.SP_GroupProduct_Create" />
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_GroupProduct_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElements" FunctionName="IMIC_SHOPModel.Store.SP_GroupProduct_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Customers_Update" FunctionName="MyShopModel.Store.SP_Customers_Update" />
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Create" FunctionName="MyShopModel.Store.SP_GroupProduct_Create" />
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_deleteTemp" FunctionName="MyShopModel.Store.SP_GroupProduct_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElements" FunctionName="MyShopModel.Store.SP_GroupProduct_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_GroupProduct_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_GroupProduct_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
@@ -1646,9 +1682,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_GroupProduct_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElementsbyId" FunctionName="MyShopModel.Store.SP_GroupProduct_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_GroupProduct_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_GroupProduct_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
@@ -1659,12 +1695,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Update" FunctionName="IMIC_SHOPModel.Store.SP_GroupProduct_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Menu_Create" FunctionName="IMIC_SHOPModel.Store.SP_Menu_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Menu_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Menu_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Menu_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Menu_getElements">
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Update" FunctionName="MyShopModel.Store.SP_GroupProduct_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Menu_Create" FunctionName="MyShopModel.Store.SP_Menu_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Menu_deleteTemp" FunctionName="MyShopModel.Store.SP_Menu_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Menu_getElements" FunctionName="MyShopModel.Store.SP_Menu_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Menu_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Menu_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Link" ColumnName="Link" />
@@ -1674,9 +1710,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Menu_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Menu_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Menu_getElementsbyId" FunctionName="MyShopModel.Store.SP_Menu_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Menu_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Menu_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Link" ColumnName="Link" />
@@ -1686,11 +1722,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Menu_Update" FunctionName="IMIC_SHOPModel.Store.SP_Menu_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Order_Create" FunctionName="IMIC_SHOPModel.Store.SP_Order_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Order_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Order_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Menu_Update" FunctionName="MyShopModel.Store.SP_Menu_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Order_Create" FunctionName="MyShopModel.Store.SP_Order_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Order_deleteTemp" FunctionName="MyShopModel.Store.SP_Order_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Order_getElements" FunctionName="MyShopModel.Store.SP_Order_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Order_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Order_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
                 <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
@@ -1700,11 +1737,24 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Create" FunctionName="IMIC_SHOPModel.Store.SP_OrderDetail_Create" />
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_OrderDetail_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElements" FunctionName="IMIC_SHOPModel.Store.SP_OrderDetail_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Order_getElementsbyId" FunctionName="MyShopModel.Store.SP_Order_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_OrderDetail_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Order_getElementsbyId_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="isDel" ColumnName="isDel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Order_Update" FunctionName="MyShopModel.Store.SP_Order_Update" />
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Create" FunctionName="MyShopModel.Store.SP_OrderDetail_Create" />
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_deleteTemp" FunctionName="MyShopModel.Store.SP_OrderDetail_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElements" FunctionName="MyShopModel.Store.SP_OrderDetail_getElements">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MyShopModel.SP_OrderDetail_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
@@ -1713,9 +1763,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_OrderDetail_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElementsbyId" FunctionName="MyShopModel.Store.SP_OrderDetail_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_OrderDetail_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_OrderDetail_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
@@ -1724,12 +1774,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Update" FunctionName="IMIC_SHOPModel.Store.SP_OrderDetail_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Product_Create" FunctionName="IMIC_SHOPModel.Store.SP_Product_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Product_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Product_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Product_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Product_getElements">
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Update" FunctionName="MyShopModel.Store.SP_OrderDetail_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Product_Create" FunctionName="MyShopModel.Store.SP_Product_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Product_deleteTemp" FunctionName="MyShopModel.Store.SP_Product_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Product_getElements" FunctionName="MyShopModel.Store.SP_Product_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Product_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Product_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
@@ -1744,9 +1794,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Product_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Product_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Product_getElementsbyId" FunctionName="MyShopModel.Store.SP_Product_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Product_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Product_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
@@ -1761,45 +1811,33 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Product_Update" FunctionName="IMIC_SHOPModel.Store.SP_Product_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Province_Create" FunctionName="IMIC_SHOPModel.Store.SP_Province_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Province_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Province_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Province_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Province_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Product_Update" FunctionName="MyShopModel.Store.SP_Product_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Province_Create" FunctionName="MyShopModel.Store.SP_Province_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Province_deleteTemp" FunctionName="MyShopModel.Store.SP_Province_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Province_getElements" FunctionName="MyShopModel.Store.SP_Province_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Province_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Province_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Province_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Province_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Province_getElementsbyId" FunctionName="MyShopModel.Store.SP_Province_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Province_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Province_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Province_Update" FunctionName="IMIC_SHOPModel.Store.SP_Province_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Shop_Create" FunctionName="IMIC_SHOPModel.Store.SP_Shop_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Shop_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Shop_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Shop_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Shop_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Province_Update" FunctionName="MyShopModel.Store.SP_Province_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Shop_Create" FunctionName="MyShopModel.Store.SP_Shop_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Shop_deleteTemp" FunctionName="MyShopModel.Store.SP_Shop_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Shop_getElements" FunctionName="MyShopModel.Store.SP_Shop_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Shop_getElements_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Province_Id" ColumnName="Province_Id" />
-                <ScalarProperty Name="isDel" ColumnName="isDel" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Shop_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Shop_getElementsbyId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Shop_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Shop_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
@@ -1809,12 +1847,24 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Shop_Update" FunctionName="IMIC_SHOPModel.Store.SP_Shop_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Support_Create" FunctionName="IMIC_SHOPModel.Store.SP_Support_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Support_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Support_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Support_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Support_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Shop_getElementsbyId" FunctionName="MyShopModel.Store.SP_Shop_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Support_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Shop_getElementsbyId_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Province_Id" ColumnName="Province_Id" />
+                <ScalarProperty Name="isDel" ColumnName="isDel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Shop_Update" FunctionName="MyShopModel.Store.SP_Shop_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Support_Create" FunctionName="MyShopModel.Store.SP_Support_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Support_deleteTemp" FunctionName="MyShopModel.Store.SP_Support_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Support_getElements" FunctionName="MyShopModel.Store.SP_Support_getElements">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Support_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
@@ -1826,9 +1876,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Support_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Support_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Support_getElementsbyId" FunctionName="MyShopModel.Store.SP_Support_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Support_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Support_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
@@ -1840,12 +1890,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Support_Update" FunctionName="IMIC_SHOPModel.Store.SP_Support_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Users_Create" FunctionName="IMIC_SHOPModel.Store.SP_Users_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Users_deleteTemp" FunctionName="IMIC_SHOPModel.Store.SP_Users_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Users_getElements" FunctionName="IMIC_SHOPModel.Store.SP_Users_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Support_Update" FunctionName="MyShopModel.Store.SP_Support_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Users_Create" FunctionName="MyShopModel.Store.SP_Users_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Users_deleteTemp" FunctionName="MyShopModel.Store.SP_Users_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Users_getElements" FunctionName="MyShopModel.Store.SP_Users_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Users_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Users_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1856,9 +1906,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Users_getElementsbyId" FunctionName="IMIC_SHOPModel.Store.SP_Users_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Users_getElementsbyId" FunctionName="MyShopModel.Store.SP_Users_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="IMIC_SHOPModel.SP_Users_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopModel.SP_Users_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1869,7 +1919,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Users_Update" FunctionName="IMIC_SHOPModel.Store.SP_Users_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Users_Update" FunctionName="MyShopModel.Store.SP_Users_Update" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

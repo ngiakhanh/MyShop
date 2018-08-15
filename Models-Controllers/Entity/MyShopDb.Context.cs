@@ -15,10 +15,10 @@ namespace Models_Controllers.Entity
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class IMIC_SHOPEntities : DbContext
+    public partial class MyShopDbEntities : DbContext
     {
-        public IMIC_SHOPEntities()
-            : base("name=IMIC_SHOPEntities")
+        public MyShopDbEntities()
+            : base("name=MyShopDbEntities")
         {
         }
     
@@ -562,23 +562,23 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Menu_getElementsbyId_Result>("SP_Menu_getElementsbyId", idParameter);
         }
     
-        public virtual int SP_Menu_Update(Nullable<int> id, Nullable<int> order_Id, Nullable<int> product_Id, Nullable<int> quantity, Nullable<int> parentId, Nullable<bool> isDel)
+        public virtual int SP_Menu_Update(Nullable<int> id, string name, string link, Nullable<int> order, Nullable<int> parentId, Nullable<bool> isDel)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
                 new ObjectParameter("Id", typeof(int));
     
-            var order_IdParameter = order_Id.HasValue ?
-                new ObjectParameter("Order_Id", order_Id) :
-                new ObjectParameter("Order_Id", typeof(int));
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
     
-            var product_IdParameter = product_Id.HasValue ?
-                new ObjectParameter("Product_Id", product_Id) :
-                new ObjectParameter("Product_Id", typeof(int));
+            var linkParameter = link != null ?
+                new ObjectParameter("Link", link) :
+                new ObjectParameter("Link", typeof(string));
     
-            var quantityParameter = quantity.HasValue ?
-                new ObjectParameter("Quantity", quantity) :
-                new ObjectParameter("Quantity", typeof(int));
+            var orderParameter = order.HasValue ?
+                new ObjectParameter("Order", order) :
+                new ObjectParameter("Order", typeof(int));
     
             var parentIdParameter = parentId.HasValue ?
                 new ObjectParameter("ParentId", parentId) :
@@ -588,7 +588,7 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Menu_Update", idParameter, order_IdParameter, product_IdParameter, quantityParameter, parentIdParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Menu_Update", idParameter, nameParameter, linkParameter, orderParameter, parentIdParameter, isDelParameter);
         }
     
         public virtual int SP_Order_Create(Nullable<int> customer_Id, Nullable<double> totalMoney, Nullable<System.DateTime> date, Nullable<int> status, Nullable<bool> isDel)
@@ -616,9 +616,56 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Order_Create", customer_IdParameter, totalMoneyParameter, dateParameter, statusParameter, isDelParameter);
         }
     
+        public virtual int SP_Order_deleteTemp(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Order_deleteTemp", idParameter);
+        }
+    
         public virtual ObjectResult<SP_Order_getElements_Result> SP_Order_getElements()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Order_getElements_Result>("SP_Order_getElements");
+        }
+    
+        public virtual ObjectResult<SP_Order_getElementsbyId_Result> SP_Order_getElementsbyId(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Order_getElementsbyId_Result>("SP_Order_getElementsbyId", idParameter);
+        }
+    
+        public virtual int SP_Order_Update(Nullable<int> id, Nullable<int> customer_Id, Nullable<double> totalMoney, Nullable<System.DateTime> date, Nullable<int> status, Nullable<bool> isDel)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var customer_IdParameter = customer_Id.HasValue ?
+                new ObjectParameter("Customer_Id", customer_Id) :
+                new ObjectParameter("Customer_Id", typeof(int));
+    
+            var totalMoneyParameter = totalMoney.HasValue ?
+                new ObjectParameter("TotalMoney", totalMoney) :
+                new ObjectParameter("TotalMoney", typeof(double));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(int));
+    
+            var isDelParameter = isDel.HasValue ?
+                new ObjectParameter("isDel", isDel) :
+                new ObjectParameter("isDel", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Order_Update", idParameter, customer_IdParameter, totalMoneyParameter, dateParameter, statusParameter, isDelParameter);
         }
     
         public virtual int SP_OrderDetail_Create(Nullable<int> order_Id, Nullable<int> product_Id, Nullable<int> quantity, Nullable<bool> isDel)

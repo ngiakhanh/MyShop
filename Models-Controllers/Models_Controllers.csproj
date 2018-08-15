@@ -49,7 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvertiseModel.cs" />
     <Compile Include="BaseModel.cs" />
+    <Compile Include="CompanyModel.cs" />
+    <Compile Include="ContactModel.cs" />
+    <Compile Include="CustomerModel.cs" />
     <Compile Include="Entity\Advertise.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
@@ -140,6 +144,9 @@
     <Compile Include="Entity\SP_OrderDetail_getElements_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entity\SP_Order_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity\SP_Order_getElements_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
@@ -179,7 +186,16 @@
     <Compile Include="Entity\User.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="GroupProductModel.cs" />
+    <Compile Include="MenuModel.cs" />
+    <Compile Include="OrderDetailModel.cs" />
+    <Compile Include="OrderModel.cs" />
+    <Compile Include="ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProvinceModel.cs" />
+    <Compile Include="ShopModel.cs" />
+    <Compile Include="SupportModel.cs" />
+    <Compile Include="UserModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Entity\MyShopDb.edmx">
@@ -194,6 +210,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ValueObject\ValueObject.csproj">
+      <Project>{f3393f82-b6cf-4016-8d90-80c2608016ed}</Project>
+      <Name>ValueObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entity\MyShopDb.Context.tt">

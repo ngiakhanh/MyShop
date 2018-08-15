@@ -17,6 +17,6 @@ namespace ValueObject
         public string Password { get; set; }
         public Nullable<int> Rule { get; set; }
         public Nullable<int> Status { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

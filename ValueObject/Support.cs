@@ -18,6 +18,6 @@ namespace ValueObject
         public string Nick { get; set; }
         public Nullable<int> Order { get; set; }
         public Nullable<int> Status { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

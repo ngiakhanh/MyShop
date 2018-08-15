@@ -15,8 +15,6 @@ namespace ValueObject
         public Nullable<int> Order_Id { get; set; }
         public Nullable<int> Product_Id { get; set; }
         public Nullable<int> Quantity { get; set; }   
-        public virtual Order Order { get; set; }
-        public virtual Product Product { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

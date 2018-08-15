@@ -6,6 +6,7 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using System;
 namespace ValueObject
 {
     public class Company
@@ -15,6 +16,6 @@ namespace ValueObject
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Fax { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

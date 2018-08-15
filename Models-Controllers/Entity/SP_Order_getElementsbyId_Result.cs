@@ -6,17 +6,17 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-namespace ValueObject
-{   
-    public class GroupProduct
-    {  
+
+namespace Models_Controllers.Entity
+{
+    using System;
+    
+    public partial class SP_Order_getElementsbyId_Result
+    {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Content { get; set; }
-        public string Images { get; set; }
-        public Nullable<int> Order { get; set; }
+        public Nullable<int> Customer_Id { get; set; }
+        public Nullable<double> TotalMoney { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<bool> isDel { get; set; }
     }

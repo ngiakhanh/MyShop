@@ -19,6 +19,6 @@ namespace ValueObject
         public string Mal { get; set; }
         public string Detail { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

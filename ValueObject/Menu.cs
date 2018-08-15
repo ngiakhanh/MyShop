@@ -16,6 +16,6 @@ namespace ValueObject
         public string Link { get; set; }
         public Nullable<int> Order { get; set; }
         public Nullable<int> ParentId { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

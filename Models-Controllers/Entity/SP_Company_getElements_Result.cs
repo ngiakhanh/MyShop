@@ -18,6 +18,6 @@ namespace Models_Controllers.Entity
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public string Fax { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

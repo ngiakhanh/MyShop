@@ -18,6 +18,6 @@ namespace ValueObject
         public string Address { get; set; }
         public string Tel { get; set; }
         public string Email { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

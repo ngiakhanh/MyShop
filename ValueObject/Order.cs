@@ -17,7 +17,6 @@ namespace ValueObject
         public Nullable<double> TotalMoney { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> Status { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

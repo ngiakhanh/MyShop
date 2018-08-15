@@ -4,24 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="96e5f7016af746149b93ea0c18e110bc" Name="Diagram1">
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Advertise" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Company" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Contact" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Customer" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.GroupProduct" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Menu" Width="1.5" PointX="6.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Order" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.OrderDetail" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Province" Width="1.5" PointX="5.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Shop" Width="1.5" PointX="8" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.Support" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IMIC_SHOPModel.User" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="IMIC_SHOPModel.FK_Product_GroupProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="IMIC_SHOPModel.FK_OrderDetail_Order" ManuallyRouted="false" />
-        <AssociationConnector Association="IMIC_SHOPModel.FK_OrderDetail_Product" ManuallyRouted="false" />
-        <AssociationConnector Association="IMIC_SHOPModel.FK_Shop_Province" ManuallyRouted="false" />
+      <Diagram DiagramId="41f06a9ec0784930bb4e0d275ed39513" Name="Diagram1">
+        <EntityTypeShape EntityType="MyShopModel.Advertise" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Company" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Contact" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Customer" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.GroupProduct" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Menu" Width="1.5" PointX="6.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Order" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.OrderDetail" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Province" Width="1.5" PointX="5.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Shop" Width="1.5" PointX="8" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.Support" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopModel.User" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="MyShopModel.FK_Product_GroupProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopModel.FK_OrderDetail_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopModel.FK_OrderDetail_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopModel.FK_Shop_Province" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

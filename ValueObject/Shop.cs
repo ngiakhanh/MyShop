@@ -16,7 +16,6 @@ namespace ValueObject
         public string Address { get; set; }
         public string Tel { get; set; }
         public Nullable<int> Province_Id { get; set; } 
-        public virtual Province Province { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }

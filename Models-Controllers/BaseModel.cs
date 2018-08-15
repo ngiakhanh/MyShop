@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace Models_Controllers
 {
-    public class BaseModels<T>
+    public class BaseModel<T>
     {
-        protected IMIC_SHOPEntities dbContext;
-        public BaseModels()
+        protected MyShopDbEntities dbContext;
+        public BaseModel()
         {
-            dbContext = new IMIC_SHOPEntities();
+            dbContext = new MyShopDbEntities();
         }
-
         public virtual List<T> getElements() { return null; }
-        public virtual T getElementById(Guid id) { return default(T); }
+        public virtual T getElementById(int id) { return default(T); }
         public virtual Boolean create(T obj) { return true; }
         public virtual Boolean update(T obj) { return true; }
-        public virtual Boolean delete(Guid id) { return true; }
+        public virtual Boolean delete(int id) { return true; }
     }
 }

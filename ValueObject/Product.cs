@@ -22,8 +22,6 @@ namespace ValueObject
         public Nullable<int> Order { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> GroupProduct_Id { get; set; }  
-        public virtual GroupProduct GroupProduct { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public bool isDel { get; set; }
+        public Nullable<bool> isDel { get; set; }
     }
 }
