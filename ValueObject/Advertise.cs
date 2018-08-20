@@ -12,6 +12,7 @@ namespace ValueObject
     public class Advertise
     {
         public int Id { get; set; }
+        public int Company_Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
         public Nullable<int> Width { get; set; }

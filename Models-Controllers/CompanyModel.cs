@@ -21,6 +21,7 @@ namespace Models_Controllers
                     Address = item.Address,
                     PhoneNumber = item.PhoneNumber,
                     Fax = item.Fax,
+                    Email = item.Email,
                     isDel = item.isDel
                 };
                 listChosen.Add(obj);
@@ -39,6 +40,7 @@ namespace Models_Controllers
                     Address = item.Address,
                     PhoneNumber = item.PhoneNumber,
                     Fax = item.Fax,
+                    Email = item.Email,
                     isDel = item.isDel
                 };
                 return obj;
@@ -49,7 +51,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Company_Create(obj.Name, obj.Address, obj.PhoneNumber, obj.Fax, false) > 0;
+                return dbContext.SP_Company_Create(obj.Name, obj.Address, obj.PhoneNumber, obj.Fax, obj.Email, false) > 0;
             }
             catch
             {
@@ -60,7 +62,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Company_Update(obj.Id, obj.Name, obj.Address, obj.PhoneNumber, obj.Fax, false) > 0;
+                return dbContext.SP_Company_Update(obj.Id, obj.Name, obj.Address, obj.PhoneNumber, obj.Fax, obj.Email, false) > 0;
             }
             catch
             {

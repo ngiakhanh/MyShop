@@ -14,6 +14,13 @@ namespace Models_Controllers.Entity
     
     public partial class Customer
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Customer()
+        {
+            this.Contacts = new HashSet<Contact>();
+            this.Orders = new HashSet<Order>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public Nullable<System.DateTime> BirthDay { get; set; }
@@ -22,5 +29,10 @@ namespace Models_Controllers.Entity
         public string Tel { get; set; }
         public string Email { get; set; }
         public Nullable<bool> isDel { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contact> Contacts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

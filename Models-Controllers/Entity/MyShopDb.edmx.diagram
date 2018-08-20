@@ -4,24 +4,30 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="41f06a9ec0784930bb4e0d275ed39513" Name="Diagram1">
-        <EntityTypeShape EntityType="MyShopModel.Advertise" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Company" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Contact" Width="1.5" PointX="2.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Customer" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.GroupProduct" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Menu" Width="1.5" PointX="6.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Order" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.OrderDetail" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Province" Width="1.5" PointX="5.75" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Shop" Width="1.5" PointX="8" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.Support" Width="1.5" PointX="8.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MyShopModel.User" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="MyShopModel.FK_Product_GroupProduct" ManuallyRouted="false" />
-        <AssociationConnector Association="MyShopModel.FK_OrderDetail_Order" ManuallyRouted="false" />
-        <AssociationConnector Association="MyShopModel.FK_OrderDetail_Product" ManuallyRouted="false" />
-        <AssociationConnector Association="MyShopModel.FK_Shop_Province" ManuallyRouted="false" />
+      <Diagram DiagramId="c0ba7d5500e84c4aa50450c00b8b07ef" Name="Diagram1">
+        <EntityTypeShape EntityType="MyShopDbModel.Advertise" Width="1.5" PointX="8" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Company" Width="1.5" PointX="5.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Contact" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Customer" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Employee" Width="1.5" PointX="10" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.GroupProduct" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Menu" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Order" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.OrderDetail" Width="1.5" PointX="5.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Product" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Province" Width="1.5" PointX="7.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.Shop" Width="1.5" PointX="10" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.sysdiagram" Width="1.5" PointX="10.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyShopDbModel.User" Width="1.5" PointX="7.75" PointY="1.375" IsExpanded="true" />
+        <AssociationConnector Association="MyShopDbModel.FK_Advertise_Company" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_Contact_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_Order_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_Support_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_Menu_GroupProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_Product_GroupProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_OrderDetail_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_OrderDetail_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="MyShopDbModel.FK_Shop_Province" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -18,11 +18,8 @@ namespace Models_Controllers
                 Contact obj = new Contact
                 {
                     Id = item.Id,
-                    Name = item.Name,
-                    Company = item.Company,
-                    Address = item.Address,
-                    Tel = item.Tel,
-                    Mal = item.Mal,
+                    Customer_Id = item.Customer_Id,
+                    Summary = item.Summary,
                     Detail = item.Detail,
                     Date = item.Date,
                     isDel = item.isDel
@@ -39,11 +36,8 @@ namespace Models_Controllers
                 Contact obj = new Contact
                 {
                     Id = item.Id,
-                    Name = item.Name,
-                    Company = item.Company,
-                    Address = item.Address,
-                    Tel = item.Tel,
-                    Mal = item.Mal,
+                    Customer_Id = item.Customer_Id,
+                    Summary = item.Summary,
                     Detail = item.Detail,
                     Date = item.Date,
                     isDel = item.isDel
@@ -56,7 +50,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Contact_Create(obj.Name, obj.Company, obj.Address, obj.Tel, obj.Mal, obj.Detail, obj.Date, false) > 0;
+                return dbContext.SP_Contact_Create(obj.Customer_Id, obj.Summary, obj.Detail, obj.Date, false) > 0;
             }
             catch
             {
@@ -67,7 +61,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Contact_Update(obj.Id, obj.Name, obj.Company, obj.Address, obj.Tel, obj.Mal, obj.Detail, obj.Date, false) > 0;
+                return dbContext.SP_Contact_Update(obj.Id, obj.Customer_Id, obj.Summary, obj.Detail, obj.Date, false) > 0;
             }
             catch
             {

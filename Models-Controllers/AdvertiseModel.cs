@@ -18,6 +18,7 @@ namespace Models_Controllers
                 Advertise obj = new Advertise
                 {
                     Id = item.Id,
+                    Company_Id = item.Company_Id,
                     Name = item.Name,
                     Url = item.Url,
                     Width = item.Width,
@@ -41,6 +42,7 @@ namespace Models_Controllers
                 Advertise obj = new Advertise
                 {
                     Id = item.Id,
+                    Company_Id = item.Company_Id,
                     Name = item.Name,
                     Url = item.Url,
                     Width = item.Width,
@@ -60,7 +62,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Advertise_Create(obj.Name, obj.Url, obj.Width, obj.Height, obj.Link, obj.Target, obj.Postion, obj.Order, obj.Status, false) > 0;
+                return dbContext.SP_Advertise_Create(obj.Company_Id, obj.Name, obj.Url, obj.Width, obj.Height, obj.Link, obj.Target, obj.Postion, obj.Order, obj.Status, false) > 0;
             }
             catch
             {
@@ -71,7 +73,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Advertise_Update(obj.Id, obj.Name, obj.Url, obj.Width, obj.Height, obj.Link, obj.Target, obj.Postion, obj.Order, obj.Status, false) > 0;
+                return dbContext.SP_Advertise_Update(obj.Id, obj.Company_Id, obj.Name, obj.Url, obj.Width, obj.Height, obj.Link, obj.Target, obj.Postion, obj.Order, obj.Status, false) > 0;
             }
             catch
             {

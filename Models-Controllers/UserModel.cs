@@ -18,7 +18,6 @@ namespace Models_Controllers
                 User obj = new User
                 {
                     Id = item.Id,
-                    Name = item.Name,
                     UserName = item.UserName,
                     Password = item.Password,
                     Rule = item.Rule,
@@ -37,7 +36,6 @@ namespace Models_Controllers
                 User obj = new User
                 {
                     Id = item.Id,
-                    Name = item.Name,
                     UserName = item.UserName,
                     Password = item.Password,
                     Rule = item.Rule,
@@ -52,7 +50,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Users_Create(obj.Name, obj.UserName, obj.Password, obj.Rule, obj.Status, false) > 0;
+                return dbContext.SP_Users_Create(obj.UserName, obj.Password, obj.Rule, obj.Status, false) > 0;
             }
             catch
             {
@@ -63,7 +61,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Users_Update(obj.Id, obj.Name, obj.UserName, obj.Password, obj.Rule, obj.Status, false) > 0;
+                return dbContext.SP_Users_Update(obj.Id, obj.UserName, obj.Password, obj.Rule, obj.Status, false) > 0;
             }
             catch
             {

@@ -15,6 +15,7 @@ namespace Models_Controllers.Entity
     public partial class Advertise
     {
         public int Id { get; set; }
+        public int Company_Id { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
         public Nullable<int> Width { get; set; }
@@ -25,5 +26,7 @@ namespace Models_Controllers.Entity
         public Nullable<int> Order { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<bool> isDel { get; set; }
+    
+        public virtual Company Company { get; set; }
     }
 }

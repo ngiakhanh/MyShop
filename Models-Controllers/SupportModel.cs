@@ -7,22 +7,24 @@ using ValueObject;
 
 namespace Models_Controllers
 {
-    class SupportModel:BaseModel<Support>
+    class EmployeesModel:BaseModel<Employees>
     {
-        public override List<Support> getElements()
+        public override List<Employees> getElements()
         {
-            var listData = dbContext.SP_Support_getElements();
-            List<Support> listChosen = new List<Support>();
+            var listData = dbContext.SP_Employees_getElements();
+            List<Employees> listChosen = new List<Employees>();
             foreach (var item in listData)
             {
-                Support obj = new Support
+                Employees obj = new Employees
                 {
                     Id = item.Id,
+                    User_Id = item.User_Id,
                     Name = item.Name,
+                    Email = item.Email,
+                    Address = item.Address,
                     Tel = item.Tel,
                     Type = item.Type,
                     Nick = item.Nick,
-                    Order = item.Order,
                     Status = item.Status,
                     isDel = item.isDel
                 };
@@ -30,19 +32,21 @@ namespace Models_Controllers
             }
             return listChosen;
         }
-        public override Support getElementById(int id)
+        public override Employees getElementById(int id)
         {
-            var listData = dbContext.SP_Support_getElementsbyId(id);
+            var listData = dbContext.SP_Employees_getElementsbyId(id);
             foreach (var item in listData)
             {
-                Support obj = new Support
+                Employees obj = new Employees
                 {
                     Id = item.Id,
+                    User_Id = item.User_Id,
                     Name = item.Name,
+                    Email = item.Email,
+                    Address = item.Address,
                     Tel = item.Tel,
                     Type = item.Type,
                     Nick = item.Nick,
-                    Order = item.Order,
                     Status = item.Status,
                     isDel = item.isDel
                 };
@@ -50,22 +54,22 @@ namespace Models_Controllers
             }
             return null;
         }
-        public override bool create(Support obj)
+        public override bool create(Employees obj)
         {
             try
             {
-                return dbContext.SP_Support_Create(obj.Name, obj.Tel, obj.Type, obj.Nick, obj.Order, obj.Status, false) > 0;
+                return dbContext.SP_Employees_Create(obj.User_Id, obj.Name, obj.Email, obj.Address, obj.Tel, obj.Type, obj.Nick, obj.Status, false) > 0;
             }
             catch
             {
                 return false;
             }
         }
-        public override bool update(Support obj)
+        public override bool update(Employees obj)
         {
             try
             {
-                return dbContext.SP_Support_Update(obj.Id, obj.Name, obj.Tel, obj.Type, obj.Nick, obj.Order, obj.Status, false) > 0;
+                return dbContext.SP_Employees_Update(obj.Id, obj.User_Id, obj.Name, obj.Email, obj.Address, obj.Tel, obj.Type, obj.Nick, obj.Status, false) > 0;
             }
             catch
             {
@@ -76,7 +80,7 @@ namespace Models_Controllers
         {
             try
             {
-                return dbContext.SP_Support_deleteTemp(id) > 0;
+                return dbContext.SP_Employees_deleteTemp(id) > 0;
             }
             catch
             {

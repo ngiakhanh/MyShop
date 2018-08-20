@@ -20,5 +20,7 @@ namespace Models_Controllers.Entity
         public Nullable<int> Order { get; set; }
         public Nullable<int> ParentId { get; set; }
         public Nullable<bool> isDel { get; set; }
+    
+        public virtual GroupProduct GroupProduct { get; set; }
     }
 }

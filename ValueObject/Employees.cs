@@ -6,19 +6,20 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
-namespace Models_Controllers.Entity
-{
-    using System;
-    
-    public partial class SP_Company_getElementsbyId_Result
+using System;
+namespace ValueObject
+{   
+    public class Employees
     {
         public int Id { get; set; }
+        public int User_Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Fax { get; set; }
         public string Email { get; set; }
+        public string Address { get; set; }
+        public string Tel { get; set; }
+        public Nullable<int> Type { get; set; }
+        public string Nick { get; set; }
+        public Nullable<int> Status { get; set; }
         public Nullable<bool> isDel { get; set; }
     }
 }

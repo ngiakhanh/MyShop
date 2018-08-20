@@ -6,18 +6,17 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System;
-namespace ValueObject
-{   
-    public class Support
+
+namespace Models_Controllers.Entity
+{
+    using System;
+    
+    public partial class sp_helpdiagrams_Result
     {
-        public int Id { get; set; }
+        public string Database { get; set; }
         public string Name { get; set; }
-        public string Tel { get; set; }
-        public Nullable<int> Type { get; set; }
-        public string Nick { get; set; }
-        public Nullable<int> Order { get; set; }
-        public Nullable<int> Status { get; set; }
-        public Nullable<bool> isDel { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

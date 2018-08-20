@@ -4,12 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MyShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MyShopDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Advertise">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company_Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
           <Property Name="Url" Type="nvarchar" MaxLength="500" />
           <Property Name="Width" Type="int" />
@@ -26,10 +27,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Address" Type="ntext" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="Fax" Type="varchar" MaxLength="20" />
+          <Property Name="Email" Type="varchar" MaxLength="300" />
           <Property Name="isDel" Type="bit" />
         </EntityType>
         <EntityType Name="Contact">
@@ -37,13 +39,10 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" />
-          <Property Name="Company" Type="nvarchar" MaxLength="500" />
-          <Property Name="Address" Type="ntext" />
-          <Property Name="Tel" Type="varchar" MaxLength="20" />
-          <Property Name="Mal" Type="varchar" MaxLength="300" />
-          <Property Name="Detail" Type="ntext" />
-          <Property Name="Date" Type="datetime" />
+          <Property Name="Customer_Id" Type="int" Nullable="false" />
+          <Property Name="Summary" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Detail" Type="ntext" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="isDel" Type="bit" />
         </EntityType>
         <EntityType Name="Customers">
@@ -56,7 +55,22 @@
           <Property Name="Province" Type="nvarchar" MaxLength="300" />
           <Property Name="Address" Type="ntext" />
           <Property Name="Tel" Type="varchar" MaxLength="20" />
-          <Property Name="Email" Type="nvarchar" MaxLength="300" />
+          <Property Name="Email" Type="varchar" MaxLength="300" />
+          <Property Name="isDel" Type="bit" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="User_Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="Address" Type="ntext" Nullable="false" />
+          <Property Name="Tel" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Type" Type="int" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Status" Type="int" />
           <Property Name="isDel" Type="bit" />
         </EntityType>
         <EntityType Name="GroupProduct">
@@ -138,31 +152,75 @@
           <Property Name="Province_Id" Type="int" />
           <Property Name="isDel" Type="bit" />
         </EntityType>
-        <EntityType Name="Support">
+        <EntityType Name="sysdiagrams">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" />
-          <Property Name="Tel" Type="varchar" MaxLength="20" />
-          <Property Name="Type" Type="int" />
-          <Property Name="Nick" Type="varchar" MaxLength="50" />
-          <Property Name="Order" Type="int" />
-          <Property Name="Status" Type="int" />
-          <Property Name="isDel" Type="bit" />
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" />
           <Property Name="UserName" Type="varchar" MaxLength="500" />
           <Property Name="Password" Type="varchar" MaxLength="500" />
           <Property Name="Rule" Type="int" />
           <Property Name="Status" Type="int" />
           <Property Name="isDel" Type="bit" />
         </EntityType>
+        <Association Name="FK_Advertise_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Advertise" Type="Self.Advertise" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Advertise">
+              <PropertyRef Name="Company_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contact_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+          <End Role="Contact" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contact">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Menu_GroupProduct">
+          <End Role="GroupProduct" Type="Self.GroupProduct" Multiplicity="0..1" />
+          <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GroupProduct">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Menu">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrderDetail_Order">
           <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
           <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
@@ -211,7 +269,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Support_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="User_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="SP_Advertise_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Company" Type="int" Mode="In" />
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="Url" Type="nvarchar" Mode="In" />
           <Parameter Name="Width" Type="int" Mode="In" />
@@ -232,6 +304,7 @@
         </Function>
         <Function Name="SP_Advertise_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Company" Type="int" Mode="In" />
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="Url" Type="nvarchar" Mode="In" />
           <Parameter Name="Width" Type="int" Mode="In" />
@@ -243,11 +316,18 @@
           <Parameter Name="Status" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
         <Function Name="SP_Company_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="Address" Type="ntext" Mode="In" />
           <Parameter Name="PhoneNumber" Type="varchar" Mode="In" />
           <Parameter Name="Fax" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
         <Function Name="SP_Company_deleteTemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -263,14 +343,12 @@
           <Parameter Name="Address" Type="ntext" Mode="In" />
           <Parameter Name="PhoneNumber" Type="varchar" Mode="In" />
           <Parameter Name="Fax" Type="varchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
         <Function Name="SP_Contact_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Name" Type="nvarchar" Mode="In" />
-          <Parameter Name="Company" Type="nvarchar" Mode="In" />
-          <Parameter Name="Address" Type="ntext" Mode="In" />
-          <Parameter Name="Tel" Type="varchar" Mode="In" />
-          <Parameter Name="Mal" Type="varchar" Mode="In" />
+          <Parameter Name="Customer" Type="int" Mode="In" />
+          <Parameter Name="Summary" Type="nvarchar" Mode="In" />
           <Parameter Name="Detail" Type="ntext" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
@@ -284,14 +362,17 @@
         </Function>
         <Function Name="SP_Contact_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="nvarchar" Mode="In" />
-          <Parameter Name="Company" Type="nvarchar" Mode="In" />
-          <Parameter Name="Address" Type="ntext" Mode="In" />
-          <Parameter Name="Tel" Type="varchar" Mode="In" />
-          <Parameter Name="Mal" Type="nvarchar" Mode="In" />
+          <Parameter Name="Customer" Type="int" Mode="In" />
+          <Parameter Name="Summary" Type="nvarchar" Mode="In" />
           <Parameter Name="Detail" Type="ntext" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
         </Function>
         <Function Name="SP_Customers_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
@@ -299,7 +380,7 @@
           <Parameter Name="Province" Type="nvarchar" Mode="In" />
           <Parameter Name="Address" Type="ntext" Mode="In" />
           <Parameter Name="Tel" Type="varchar" Mode="In" />
-          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
         <Function Name="SP_Customers_deleteTemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -316,7 +397,41 @@
           <Parameter Name="Province" Type="nvarchar" Mode="In" />
           <Parameter Name="Address" Type="ntext" Mode="In" />
           <Parameter Name="Tel" Type="varchar" Mode="In" />
-          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="isDel" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_Employees_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="User" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Address" Type="ntext" Mode="In" />
+          <Parameter Name="Tel" Type="varchar" Mode="In" />
+          <Parameter Name="Type" Type="int" Mode="In" />
+          <Parameter Name="Nick" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="int" Mode="In" />
+          <Parameter Name="isDel" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="SP_Employees_deleteTemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_Employees_getElements" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_Employees_getElementsbyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_Employees_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="User" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="varchar" Mode="In" />
+          <Parameter Name="Address" Type="ntext" Mode="In" />
+          <Parameter Name="Tel" Type="varchar" Mode="In" />
+          <Parameter Name="Type" Type="int" Mode="In" />
+          <Parameter Name="Nick" Type="varchar" Mode="In" />
+          <Parameter Name="Status" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
         <Function Name="SP_GroupProduct_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -342,6 +457,14 @@
           <Parameter Name="Order" Type="int" Mode="In" />
           <Parameter Name="Status" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_Menu_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
@@ -455,6 +578,11 @@
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="SP_Shop_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="Address" Type="nvarchar" Mode="In" />
@@ -477,34 +605,8 @@
           <Parameter Name="Province_Id" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
-        <Function Name="SP_Support_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Name" Type="nvarchar" Mode="In" />
-          <Parameter Name="Tel" Type="varchar" Mode="In" />
-          <Parameter Name="Type" Type="int" Mode="In" />
-          <Parameter Name="Nick" Type="varchar" Mode="In" />
-          <Parameter Name="Order" Type="int" Mode="In" />
-          <Parameter Name="Status" Type="int" Mode="In" />
-          <Parameter Name="isDel" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="SP_Support_deleteTemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_Support_getElements" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="SP_Support_getElementsbyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_Support_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="nvarchar" Mode="In" />
-          <Parameter Name="Tel" Type="varchar" Mode="In" />
-          <Parameter Name="Type" Type="int" Mode="In" />
-          <Parameter Name="Nick" Type="varchar" Mode="In" />
-          <Parameter Name="Order" Type="int" Mode="In" />
-          <Parameter Name="Status" Type="int" Mode="In" />
-          <Parameter Name="isDel" Type="bit" Mode="In" />
-        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_Users_Create" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="UserName" Type="nvarchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
           <Parameter Name="Rule" Type="int" Mode="In" />
@@ -520,18 +622,18 @@
         </Function>
         <Function Name="SP_Users_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
-          <Parameter Name="Name" Type="nvarchar" Mode="In" />
           <Parameter Name="UserName" Type="nvarchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar" Mode="In" />
           <Parameter Name="Rule" Type="int" Mode="In" />
           <Parameter Name="Status" Type="int" Mode="In" />
           <Parameter Name="isDel" Type="bit" Mode="In" />
         </Function>
-        <EntityContainer Name="MyShopModelStoreContainer">
+        <EntityContainer Name="MyShopDbModelStoreContainer">
           <EntitySet Name="Advertise" EntityType="Self.Advertise" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupProduct" EntityType="Self.GroupProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
@@ -539,8 +641,24 @@
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Province" EntityType="Self.Province" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shop" EntityType="Self.Shop" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Support" EntityType="Self.Support" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Advertise_Company" Association="Self.FK_Advertise_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Advertise" EntitySet="Advertise" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contact_Customers" Association="Self.FK_Contact_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Contact" EntitySet="Contact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Menu_GroupProduct" Association="Self.FK_Menu_GroupProduct">
+            <End Role="GroupProduct" EntitySet="GroupProduct" />
+            <End Role="Menu" EntitySet="Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Customers" Association="Self.FK_Order_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrderDetail_Order" Association="Self.FK_OrderDetail_Order">
             <End Role="Order" EntitySet="Order" />
             <End Role="OrderDetail" EntitySet="OrderDetail" />
@@ -557,17 +675,22 @@
             <End Role="Province" EntitySet="Province" />
             <End Role="Shop" EntitySet="Shop" />
           </AssociationSet>
+          <AssociationSet Name="FK_Support_Users" Association="Self.FK_Support_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MyShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="MyShopDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Advertise">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Company_Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Url" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Width" Type="Int32" />
@@ -578,31 +701,32 @@
           <Property Name="Order" Type="Int32" />
           <Property Name="Status" Type="Int32" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Company" Relationship="Self.FK_Advertise_Company" FromRole="Advertise" ToRole="Company" />
         </EntityType>
         <EntityType Name="Company">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Fax" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Advertises" Relationship="Self.FK_Advertise_Company" FromRole="Company" ToRole="Advertise" />
         </EntityType>
         <EntityType Name="Contact">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Company" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Mal" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Customer_Id" Type="Int32" Nullable="false" />
+          <Property Name="Summary" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Contact_Customers" FromRole="Contact" ToRole="Customers" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -614,8 +738,26 @@
           <Property Name="Province" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Contacts" Relationship="Self.FK_Contact_Customers" FromRole="Customers" ToRole="Contact" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Order_Customers" FromRole="Customers" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="User_Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Type" Type="Int32" />
+          <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Support_Users" FromRole="Employees" ToRole="Users" />
         </EntityType>
         <EntityType Name="GroupProduct">
           <Key>
@@ -628,6 +770,7 @@
           <Property Name="Order" Type="Int32" />
           <Property Name="Status" Type="Int32" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Menus" Relationship="Self.FK_Menu_GroupProduct" FromRole="GroupProduct" ToRole="Menu" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Product_GroupProduct" FromRole="GroupProduct" ToRole="Product" />
         </EntityType>
         <EntityType Name="Menu">
@@ -640,6 +783,7 @@
           <Property Name="Order" Type="Int32" />
           <Property Name="ParentId" Type="Int32" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="GroupProduct" Relationship="Self.FK_Menu_GroupProduct" FromRole="Menu" ToRole="GroupProduct" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -651,6 +795,7 @@
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Order_Customers" FromRole="Order" ToRole="Customers" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetail_Order" FromRole="Order" ToRole="OrderDetail" />
         </EntityType>
         <EntityType Name="OrderDetail">
@@ -704,31 +849,88 @@
           <Property Name="isDel" Type="Boolean" />
           <NavigationProperty Name="Province" Relationship="Self.FK_Shop_Province" FromRole="Shop" ToRole="Province" />
         </EntityType>
-        <EntityType Name="Support">
+        <EntityType Name="sysdiagram">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Type" Type="Int32" />
-          <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Order" Type="Int32" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="isDel" Type="Boolean" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="UserName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Rule" Type="Int32" />
           <Property Name="Status" Type="Int32" />
           <Property Name="isDel" Type="Boolean" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Support_Users" FromRole="Users" ToRole="Employees" />
         </EntityType>
+        <Association Name="FK_Advertise_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Advertise" Type="Self.Advertise" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Advertise">
+              <PropertyRef Name="Company_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contact_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Contact" Type="Self.Contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contact">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Customer_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Support_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="User_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Menu_GroupProduct">
+          <End Role="GroupProduct" Type="Self.GroupProduct" Multiplicity="0..1" />
+          <End Role="Menu" Type="Self.Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GroupProduct">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Menu">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Product_GroupProduct">
           <End Role="GroupProduct" Type="Self.GroupProduct" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
@@ -782,6 +984,7 @@
           <EntitySet Name="Companies" EntityType="Self.Company" />
           <EntitySet Name="Contacts" EntityType="Self.Contact" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
           <EntitySet Name="GroupProducts" EntityType="Self.GroupProduct" />
           <EntitySet Name="Menus" EntityType="Self.Menu" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
@@ -789,8 +992,28 @@
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="Provinces" EntityType="Self.Province" />
           <EntitySet Name="Shops" EntityType="Self.Shop" />
-          <EntitySet Name="Supports" EntityType="Self.Support" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Advertise_Company" Association="Self.FK_Advertise_Company">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Advertise" EntitySet="Advertises" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contact_Customers" Association="Self.FK_Contact_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Contact" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Customers" Association="Self.FK_Order_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Support_Users" Association="Self.FK_Support_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Menu_GroupProduct" Association="Self.FK_Menu_GroupProduct">
+            <End Role="GroupProduct" EntitySet="GroupProducts" />
+            <End Role="Menu" EntitySet="Menus" />
+          </AssociationSet>
           <AssociationSet Name="FK_Product_GroupProduct" Association="Self.FK_Product_GroupProduct">
             <End Role="GroupProduct" EntitySet="GroupProducts" />
             <End Role="Product" EntitySet="Products" />
@@ -808,6 +1031,7 @@
             <End Role="Shop" EntitySet="Shops" />
           </AssociationSet>
           <FunctionImport Name="SP_Advertise_Create">
+            <Parameter Name="Company" Mode="In" Type="Int32" />
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Url" Mode="In" Type="String" />
             <Parameter Name="Width" Mode="In" Type="Int32" />
@@ -822,12 +1046,13 @@
           <FunctionImport Name="SP_Advertise_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Advertise_getElements" ReturnType="Collection(MyShopModel.SP_Advertise_getElements_Result)" />
-          <FunctionImport Name="SP_Advertise_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Advertise_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Advertise_getElements" ReturnType="Collection(MyShopDbModel.SP_Advertise_getElements_Result)" />
+          <FunctionImport Name="SP_Advertise_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Advertise_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Advertise_Update">
             <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Company" Mode="In" Type="Int32" />
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Url" Mode="In" Type="String" />
             <Parameter Name="Width" Mode="In" Type="Int32" />
@@ -839,18 +1064,25 @@
             <Parameter Name="Status" Mode="In" Type="Int32" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
           <FunctionImport Name="SP_Company_Create">
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Address" Mode="In" Type="String" />
             <Parameter Name="PhoneNumber" Mode="In" Type="String" />
             <Parameter Name="Fax" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="SP_Company_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Company_getElements" ReturnType="Collection(MyShopModel.SP_Company_getElements_Result)" />
-          <FunctionImport Name="SP_Company_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Company_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Company_getElements" ReturnType="Collection(MyShopDbModel.SP_Company_getElements_Result)" />
+          <FunctionImport Name="SP_Company_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Company_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Company_Update">
@@ -859,14 +1091,12 @@
             <Parameter Name="Address" Mode="In" Type="String" />
             <Parameter Name="PhoneNumber" Mode="In" Type="String" />
             <Parameter Name="Fax" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="SP_Contact_Create">
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Company" Mode="In" Type="String" />
-            <Parameter Name="Address" Mode="In" Type="String" />
-            <Parameter Name="Tel" Mode="In" Type="String" />
-            <Parameter Name="Mal" Mode="In" Type="String" />
+            <Parameter Name="Customer" Mode="In" Type="Int32" />
+            <Parameter Name="Summary" Mode="In" Type="String" />
             <Parameter Name="Detail" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
@@ -874,20 +1104,23 @@
           <FunctionImport Name="SP_Contact_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Contact_getElements" ReturnType="Collection(MyShopModel.SP_Contact_getElements_Result)" />
-          <FunctionImport Name="SP_Contact_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Contact_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Contact_getElements" ReturnType="Collection(MyShopDbModel.SP_Contact_getElements_Result)" />
+          <FunctionImport Name="SP_Contact_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Contact_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Contact_Update">
             <Parameter Name="Id" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Company" Mode="In" Type="String" />
-            <Parameter Name="Address" Mode="In" Type="String" />
-            <Parameter Name="Tel" Mode="In" Type="String" />
-            <Parameter Name="Mal" Mode="In" Type="String" />
+            <Parameter Name="Customer" Mode="In" Type="Int32" />
+            <Parameter Name="Summary" Mode="In" Type="String" />
             <Parameter Name="Detail" Mode="In" Type="String" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
           </FunctionImport>
           <FunctionImport Name="SP_Customers_Create">
             <Parameter Name="Name" Mode="In" Type="String" />
@@ -901,8 +1134,8 @@
           <FunctionImport Name="SP_Customers_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Customers_getElements" ReturnType="Collection(MyShopModel.SP_Customers_getElements_Result)" />
-          <FunctionImport Name="SP_Customers_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Customers_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Customers_getElements" ReturnType="Collection(MyShopDbModel.SP_Customers_getElements_Result)" />
+          <FunctionImport Name="SP_Customers_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Customers_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Customers_Update">
@@ -913,6 +1146,40 @@
             <Parameter Name="Address" Mode="In" Type="String" />
             <Parameter Name="Tel" Mode="In" Type="String" />
             <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="isDel" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Employees_Create">
+            <Parameter Name="User" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="Tel" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="Int32" />
+            <Parameter Name="Nick" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Int32" />
+            <Parameter Name="isDel" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Employees_deleteTemp">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Employees_getElements" ReturnType="Collection(MyShopDbModel.SP_Employees_getElements_Result)" />
+          <FunctionImport Name="SP_Employees_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Employees_getElementsbyId_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Employees_Update">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="User" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="Address" Mode="In" Type="String" />
+            <Parameter Name="Tel" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="Int32" />
+            <Parameter Name="Nick" Mode="In" Type="String" />
+            <Parameter Name="Status" Mode="In" Type="Int32" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
           <FunctionImport Name="SP_GroupProduct_Create">
@@ -926,8 +1193,8 @@
           <FunctionImport Name="SP_GroupProduct_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_GroupProduct_getElements" ReturnType="Collection(MyShopModel.SP_GroupProduct_getElements_Result)" />
-          <FunctionImport Name="SP_GroupProduct_getElementsbyId" ReturnType="Collection(MyShopModel.SP_GroupProduct_getElementsbyId_Result)">
+          <FunctionImport Name="SP_GroupProduct_getElements" ReturnType="Collection(MyShopDbModel.SP_GroupProduct_getElements_Result)" />
+          <FunctionImport Name="SP_GroupProduct_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_GroupProduct_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_GroupProduct_Update">
@@ -939,6 +1206,14 @@
             <Parameter Name="Status" Mode="In" Type="Int32" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(MyShopDbModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(MyShopDbModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="SP_Menu_Create">
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="Link" Mode="In" Type="String" />
@@ -949,8 +1224,8 @@
           <FunctionImport Name="SP_Menu_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Menu_getElements" ReturnType="Collection(MyShopModel.SP_Menu_getElements_Result)" />
-          <FunctionImport Name="SP_Menu_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Menu_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Menu_getElements" ReturnType="Collection(MyShopDbModel.SP_Menu_getElements_Result)" />
+          <FunctionImport Name="SP_Menu_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Menu_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Menu_Update">
@@ -971,8 +1246,8 @@
           <FunctionImport Name="SP_Order_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Order_getElements" ReturnType="Collection(MyShopModel.SP_Order_getElements_Result)" />
-          <FunctionImport Name="SP_Order_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Order_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Order_getElements" ReturnType="Collection(MyShopDbModel.SP_Order_getElements_Result)" />
+          <FunctionImport Name="SP_Order_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Order_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Order_Update">
@@ -992,8 +1267,8 @@
           <FunctionImport Name="SP_OrderDetail_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_OrderDetail_getElements" ReturnType="Collection(MyShopModel.SP_OrderDetail_getElements_Result)" />
-          <FunctionImport Name="SP_OrderDetail_getElementsbyId" ReturnType="Collection(MyShopModel.SP_OrderDetail_getElementsbyId_Result)">
+          <FunctionImport Name="SP_OrderDetail_getElements" ReturnType="Collection(MyShopDbModel.SP_OrderDetail_getElements_Result)" />
+          <FunctionImport Name="SP_OrderDetail_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_OrderDetail_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_OrderDetail_Update">
@@ -1018,8 +1293,8 @@
           <FunctionImport Name="SP_Product_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Product_getElements" ReturnType="Collection(MyShopModel.SP_Product_getElements_Result)" />
-          <FunctionImport Name="SP_Product_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Product_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Product_getElements" ReturnType="Collection(MyShopDbModel.SP_Product_getElements_Result)" />
+          <FunctionImport Name="SP_Product_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Product_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Product_Update">
@@ -1042,14 +1317,19 @@
           <FunctionImport Name="SP_Province_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Province_getElements" ReturnType="Collection(MyShopModel.SP_Province_getElements_Result)" />
-          <FunctionImport Name="SP_Province_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Province_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Province_getElements" ReturnType="Collection(MyShopDbModel.SP_Province_getElements_Result)" />
+          <FunctionImport Name="SP_Province_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Province_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Province_Update">
             <Parameter Name="Id" Mode="In" Type="Int32" />
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_Shop_Create">
             <Parameter Name="Name" Mode="In" Type="String" />
@@ -1061,8 +1341,8 @@
           <FunctionImport Name="SP_Shop_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Shop_getElements" ReturnType="Collection(MyShopModel.SP_Shop_getElements_Result)" />
-          <FunctionImport Name="SP_Shop_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Shop_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Shop_getElements" ReturnType="Collection(MyShopDbModel.SP_Shop_getElements_Result)" />
+          <FunctionImport Name="SP_Shop_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Shop_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Shop_Update">
@@ -1073,34 +1353,8 @@
             <Parameter Name="Province_Id" Mode="In" Type="Int32" />
             <Parameter Name="isDel" Mode="In" Type="Boolean" />
           </FunctionImport>
-          <FunctionImport Name="SP_Support_Create">
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Tel" Mode="In" Type="String" />
-            <Parameter Name="Type" Mode="In" Type="Int32" />
-            <Parameter Name="Nick" Mode="In" Type="String" />
-            <Parameter Name="Order" Mode="In" Type="Int32" />
-            <Parameter Name="Status" Mode="In" Type="Int32" />
-            <Parameter Name="isDel" Mode="In" Type="Boolean" />
-          </FunctionImport>
-          <FunctionImport Name="SP_Support_deleteTemp">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_Support_getElements" ReturnType="Collection(MyShopModel.SP_Support_getElements_Result)" />
-          <FunctionImport Name="SP_Support_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Support_getElementsbyId_Result)">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="SP_Support_Update">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
-            <Parameter Name="Tel" Mode="In" Type="String" />
-            <Parameter Name="Type" Mode="In" Type="Int32" />
-            <Parameter Name="Nick" Mode="In" Type="String" />
-            <Parameter Name="Order" Mode="In" Type="Int32" />
-            <Parameter Name="Status" Mode="In" Type="Int32" />
-            <Parameter Name="isDel" Mode="In" Type="Boolean" />
-          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
           <FunctionImport Name="SP_Users_Create">
-            <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
             <Parameter Name="Rule" Mode="In" Type="Int32" />
@@ -1110,13 +1364,12 @@
           <FunctionImport Name="SP_Users_deleteTemp">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="SP_Users_getElements" ReturnType="Collection(MyShopModel.SP_Users_getElements_Result)" />
-          <FunctionImport Name="SP_Users_getElementsbyId" ReturnType="Collection(MyShopModel.SP_Users_getElementsbyId_Result)">
+          <FunctionImport Name="SP_Users_getElements" ReturnType="Collection(MyShopDbModel.SP_Users_getElements_Result)" />
+          <FunctionImport Name="SP_Users_getElementsbyId" ReturnType="Collection(MyShopDbModel.SP_Users_getElementsbyId_Result)">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Users_Update">
             <Parameter Name="Id" Mode="In" Type="Int32" />
-            <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
             <Parameter Name="Rule" Mode="In" Type="Int32" />
@@ -1126,6 +1379,7 @@
         </EntityContainer>
         <ComplexType Name="SP_Advertise_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Company_Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="Url" Nullable="true" MaxLength="500" />
           <Property Type="Int32" Name="Width" Nullable="true" />
@@ -1139,6 +1393,7 @@
         </ComplexType>
         <ComplexType Name="SP_Advertise_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Company_Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="Url" Nullable="true" MaxLength="500" />
           <Property Type="Int32" Name="Width" Nullable="true" />
@@ -1152,40 +1407,36 @@
         </ComplexType>
         <ComplexType Name="SP_Company_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="500" />
           <Property Type="String" Name="Address" Nullable="true" MaxLength="Max" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Fax" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="300" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Company_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="500" />
           <Property Type="String" Name="Address" Nullable="true" MaxLength="Max" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Fax" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="300" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Contact_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Company" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Address" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="Tel" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Mal" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="Detail" Nullable="true" MaxLength="Max" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Customer_Id" Nullable="false" />
+          <Property Type="String" Name="Summary" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Detail" Nullable="false" MaxLength="Max" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Contact_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Company" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Address" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="Tel" Nullable="true" MaxLength="20" />
-          <Property Type="String" Name="Mal" Nullable="true" MaxLength="300" />
-          <Property Type="String" Name="Detail" Nullable="true" MaxLength="Max" />
-          <Property Type="DateTime" Name="Date" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Customer_Id" Nullable="false" />
+          <Property Type="String" Name="Summary" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Detail" Nullable="false" MaxLength="Max" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
         <ComplexType Name="SP_Customers_getElements_Result">
@@ -1208,6 +1459,30 @@
           <Property Type="String" Name="Email" Nullable="true" MaxLength="300" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="SP_Employees_getElements_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="User_Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="Max" />
+          <Property Type="String" Name="Tel" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="Type" Nullable="true" />
+          <Property Type="String" Name="Nick" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_Employees_getElementsbyId_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="User_Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="Max" />
+          <Property Type="String" Name="Tel" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="Type" Nullable="true" />
+          <Property Type="String" Name="Nick" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="Boolean" Name="isDel" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="SP_GroupProduct_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
@@ -1225,6 +1500,17 @@
           <Property Type="Int32" Name="Order" Nullable="true" />
           <Property Type="Int32" Name="Status" Nullable="true" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
         <ComplexType Name="SP_Menu_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1324,29 +1610,8 @@
           <Property Type="Int32" Name="Province_Id" Nullable="true" />
           <Property Type="Boolean" Name="isDel" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="SP_Support_getElements_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tel" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="Type" Nullable="true" />
-          <Property Type="String" Name="Nick" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Order" Nullable="true" />
-          <Property Type="Int32" Name="Status" Nullable="true" />
-          <Property Type="Boolean" Name="isDel" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="SP_Support_getElementsbyId_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
-          <Property Type="String" Name="Tel" Nullable="true" MaxLength="20" />
-          <Property Type="Int32" Name="Type" Nullable="true" />
-          <Property Type="String" Name="Nick" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="Order" Nullable="true" />
-          <Property Type="Int32" Name="Status" Nullable="true" />
-          <Property Type="Boolean" Name="isDel" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="SP_Users_getElements_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="UserName" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="Password" Nullable="true" MaxLength="500" />
           <Property Type="Int32" Name="Rule" Nullable="true" />
@@ -1355,7 +1620,6 @@
         </ComplexType>
         <ComplexType Name="SP_Users_getElementsbyId_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="UserName" Nullable="true" MaxLength="500" />
           <Property Type="String" Name="Password" Nullable="true" MaxLength="500" />
           <Property Type="Int32" Name="Rule" Nullable="true" />
@@ -1367,11 +1631,12 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MyShopModelStoreContainer" CdmEntityContainer="MyShopDbEntities">
+        <EntityContainerMapping StorageEntityContainer="MyShopDbModelStoreContainer" CdmEntityContainer="MyShopDbEntities">
           <EntitySetMapping Name="Advertises">
-            <EntityTypeMapping TypeName="MyShopModel.Advertise">
+            <EntityTypeMapping TypeName="MyShopDbModel.Advertise">
               <MappingFragment StoreEntitySet="Advertise">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Company_Id" ColumnName="Company_Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Width" ColumnName="Width" />
@@ -1386,26 +1651,24 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="MyShopModel.Company">
+            <EntityTypeMapping TypeName="MyShopDbModel.Company">
               <MappingFragment StoreEntitySet="Company">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Contacts">
-            <EntityTypeMapping TypeName="MyShopModel.Contact">
+            <EntityTypeMapping TypeName="MyShopDbModel.Contact">
               <MappingFragment StoreEntitySet="Contact">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Mal" ColumnName="Mal" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
@@ -1413,7 +1676,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="MyShopModel.Customer">
+            <EntityTypeMapping TypeName="MyShopDbModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1426,8 +1689,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="MyShopDbModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="isDel" ColumnName="isDel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="GroupProducts">
-            <EntityTypeMapping TypeName="MyShopModel.GroupProduct">
+            <EntityTypeMapping TypeName="MyShopDbModel.GroupProduct">
               <MappingFragment StoreEntitySet="GroupProduct">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1440,7 +1719,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Menus">
-            <EntityTypeMapping TypeName="MyShopModel.Menu">
+            <EntityTypeMapping TypeName="MyShopDbModel.Menu">
               <MappingFragment StoreEntitySet="Menu">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1452,7 +1731,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="MyShopModel.Order">
+            <EntityTypeMapping TypeName="MyShopDbModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
@@ -1464,7 +1743,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="MyShopModel.OrderDetail">
+            <EntityTypeMapping TypeName="MyShopDbModel.OrderDetail">
               <MappingFragment StoreEntitySet="OrderDetail">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
@@ -1475,7 +1754,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="MyShopModel.Product">
+            <EntityTypeMapping TypeName="MyShopDbModel.Product">
               <MappingFragment StoreEntitySet="Product">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1492,7 +1771,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Provinces">
-            <EntityTypeMapping TypeName="MyShopModel.Province">
+            <EntityTypeMapping TypeName="MyShopDbModel.Province">
               <MappingFragment StoreEntitySet="Province">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1501,7 +1780,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Shops">
-            <EntityTypeMapping TypeName="MyShopModel.Shop">
+            <EntityTypeMapping TypeName="MyShopDbModel.Shop">
               <MappingFragment StoreEntitySet="Shop">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1512,25 +1791,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Supports">
-            <EntityTypeMapping TypeName="MyShopModel.Support">
-              <MappingFragment StoreEntitySet="Support">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Nick" ColumnName="Nick" />
-                <ScalarProperty Name="Order" ColumnName="Order" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="isDel" ColumnName="isDel" />
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="MyShopDbModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="MyShopModel.User">
+            <EntityTypeMapping TypeName="MyShopDbModel.User">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Rule" ColumnName="Rule" />
@@ -1539,12 +1814,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_Advertise_Create" FunctionName="MyShopModel.Store.SP_Advertise_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Advertise_deleteTemp" FunctionName="MyShopModel.Store.SP_Advertise_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Advertise_getElements" FunctionName="MyShopModel.Store.SP_Advertise_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Advertise_Create" FunctionName="MyShopDbModel.Store.SP_Advertise_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Advertise_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Advertise_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Advertise_getElements" FunctionName="MyShopDbModel.Store.SP_Advertise_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Advertise_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Advertise_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Company_Id" ColumnName="Company_Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Width" ColumnName="Width" />
@@ -1558,10 +1834,11 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Advertise_getElementsbyId" FunctionName="MyShopModel.Store.SP_Advertise_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Advertise_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Advertise_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Advertise_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Advertise_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Company_Id" ColumnName="Company_Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Width" ColumnName="Width" />
@@ -1575,72 +1852,70 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Advertise_Update" FunctionName="MyShopModel.Store.SP_Advertise_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Company_Create" FunctionName="MyShopModel.Store.SP_Company_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Company_deleteTemp" FunctionName="MyShopModel.Store.SP_Company_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Company_getElements" FunctionName="MyShopModel.Store.SP_Company_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Advertise_Update" FunctionName="MyShopDbModel.Store.SP_Advertise_Update" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="MyShopDbModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="SP_Company_Create" FunctionName="MyShopDbModel.Store.SP_Company_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Company_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Company_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Company_getElements" FunctionName="MyShopDbModel.Store.SP_Company_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Company_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Company_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Company_getElementsbyId" FunctionName="MyShopModel.Store.SP_Company_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Company_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Company_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Company_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Company_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Company_Update" FunctionName="MyShopModel.Store.SP_Company_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Contact_Create" FunctionName="MyShopModel.Store.SP_Contact_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Contact_deleteTemp" FunctionName="MyShopModel.Store.SP_Contact_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Contact_getElements" FunctionName="MyShopModel.Store.SP_Contact_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Company_Update" FunctionName="MyShopDbModel.Store.SP_Company_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Contact_Create" FunctionName="MyShopDbModel.Store.SP_Contact_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Contact_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Contact_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Contact_getElements" FunctionName="MyShopDbModel.Store.SP_Contact_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Contact_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Contact_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Mal" ColumnName="Mal" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Contact_getElementsbyId" FunctionName="MyShopModel.Store.SP_Contact_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Contact_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Contact_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Contact_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Contact_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Mal" ColumnName="Mal" />
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Contact_Update" FunctionName="MyShopModel.Store.SP_Contact_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Customers_Create" FunctionName="MyShopModel.Store.SP_Customers_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Customers_deleteTemp" FunctionName="MyShopModel.Store.SP_Customers_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Customers_getElements" FunctionName="MyShopModel.Store.SP_Customers_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Contact_Update" FunctionName="MyShopDbModel.Store.SP_Contact_Update" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="MyShopDbModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="SP_Customers_Create" FunctionName="MyShopDbModel.Store.SP_Customers_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Customers_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Customers_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Customers_getElements" FunctionName="MyShopDbModel.Store.SP_Customers_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Customers_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Customers_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
@@ -1652,9 +1927,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Customers_getElementsbyId" FunctionName="MyShopModel.Store.SP_Customers_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Customers_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Customers_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Customers_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Customers_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
@@ -1666,12 +1941,48 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Customers_Update" FunctionName="MyShopModel.Store.SP_Customers_Update" />
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Create" FunctionName="MyShopModel.Store.SP_GroupProduct_Create" />
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_deleteTemp" FunctionName="MyShopModel.Store.SP_GroupProduct_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElements" FunctionName="MyShopModel.Store.SP_GroupProduct_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Customers_Update" FunctionName="MyShopDbModel.Store.SP_Customers_Update" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="MyShopDbModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="SP_Employees_Create" FunctionName="MyShopDbModel.Store.SP_Employees_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Employees_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Employees_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Employees_getElements" FunctionName="MyShopDbModel.Store.SP_Employees_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_GroupProduct_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Employees_getElements_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="isDel" ColumnName="isDel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Employees_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Employees_getElementsbyId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Employees_getElementsbyId_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="isDel" ColumnName="isDel" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Employees_Update" FunctionName="MyShopDbModel.Store.SP_Employees_Update" />
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Create" FunctionName="MyShopDbModel.Store.SP_GroupProduct_Create" />
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_deleteTemp" FunctionName="MyShopDbModel.Store.SP_GroupProduct_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElements" FunctionName="MyShopDbModel.Store.SP_GroupProduct_getElements">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_GroupProduct_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
@@ -1682,9 +1993,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElementsbyId" FunctionName="MyShopModel.Store.SP_GroupProduct_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_GroupProduct_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_GroupProduct_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_GroupProduct_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
@@ -1695,12 +2006,31 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Update" FunctionName="MyShopModel.Store.SP_GroupProduct_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Menu_Create" FunctionName="MyShopModel.Store.SP_Menu_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Menu_deleteTemp" FunctionName="MyShopModel.Store.SP_Menu_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Menu_getElements" FunctionName="MyShopModel.Store.SP_Menu_getElements">
+          <FunctionImportMapping FunctionImportName="SP_GroupProduct_Update" FunctionName="MyShopDbModel.Store.SP_GroupProduct_Update" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="MyShopDbModel.Store.sp_helpdiagramdefinition">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Menu_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="MyShopDbModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MyShopDbModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Menu_Create" FunctionName="MyShopDbModel.Store.SP_Menu_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Menu_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Menu_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Menu_getElements" FunctionName="MyShopDbModel.Store.SP_Menu_getElements">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Menu_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Link" ColumnName="Link" />
@@ -1710,9 +2040,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Menu_getElementsbyId" FunctionName="MyShopModel.Store.SP_Menu_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Menu_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Menu_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Menu_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Menu_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Link" ColumnName="Link" />
@@ -1722,12 +2052,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Menu_Update" FunctionName="MyShopModel.Store.SP_Menu_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Order_Create" FunctionName="MyShopModel.Store.SP_Order_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Order_deleteTemp" FunctionName="MyShopModel.Store.SP_Order_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Order_getElements" FunctionName="MyShopModel.Store.SP_Order_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Menu_Update" FunctionName="MyShopDbModel.Store.SP_Menu_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Order_Create" FunctionName="MyShopDbModel.Store.SP_Order_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Order_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Order_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Order_getElements" FunctionName="MyShopDbModel.Store.SP_Order_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Order_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Order_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
                 <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
@@ -1737,9 +2067,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Order_getElementsbyId" FunctionName="MyShopModel.Store.SP_Order_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Order_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Order_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Order_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Order_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
                 <ScalarProperty Name="TotalMoney" ColumnName="TotalMoney" />
@@ -1749,12 +2079,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Order_Update" FunctionName="MyShopModel.Store.SP_Order_Update" />
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Create" FunctionName="MyShopModel.Store.SP_OrderDetail_Create" />
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_deleteTemp" FunctionName="MyShopModel.Store.SP_OrderDetail_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElements" FunctionName="MyShopModel.Store.SP_OrderDetail_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Order_Update" FunctionName="MyShopDbModel.Store.SP_Order_Update" />
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Create" FunctionName="MyShopDbModel.Store.SP_OrderDetail_Create" />
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_deleteTemp" FunctionName="MyShopDbModel.Store.SP_OrderDetail_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElements" FunctionName="MyShopDbModel.Store.SP_OrderDetail_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_OrderDetail_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_OrderDetail_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
@@ -1763,9 +2093,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElementsbyId" FunctionName="MyShopModel.Store.SP_OrderDetail_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_OrderDetail_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_OrderDetail_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_OrderDetail_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Order_Id" ColumnName="Order_Id" />
                 <ScalarProperty Name="Product_Id" ColumnName="Product_Id" />
@@ -1774,12 +2104,12 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Update" FunctionName="MyShopModel.Store.SP_OrderDetail_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Product_Create" FunctionName="MyShopModel.Store.SP_Product_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Product_deleteTemp" FunctionName="MyShopModel.Store.SP_Product_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Product_getElements" FunctionName="MyShopModel.Store.SP_Product_getElements">
+          <FunctionImportMapping FunctionImportName="SP_OrderDetail_Update" FunctionName="MyShopDbModel.Store.SP_OrderDetail_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Product_Create" FunctionName="MyShopDbModel.Store.SP_Product_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Product_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Product_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Product_getElements" FunctionName="MyShopDbModel.Store.SP_Product_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Product_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Product_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
@@ -1794,9 +2124,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Product_getElementsbyId" FunctionName="MyShopModel.Store.SP_Product_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Product_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Product_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Product_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Product_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
@@ -1811,45 +2141,34 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Product_Update" FunctionName="MyShopModel.Store.SP_Product_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Province_Create" FunctionName="MyShopModel.Store.SP_Province_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Province_deleteTemp" FunctionName="MyShopModel.Store.SP_Province_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Province_getElements" FunctionName="MyShopModel.Store.SP_Province_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Product_Update" FunctionName="MyShopDbModel.Store.SP_Product_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Province_Create" FunctionName="MyShopDbModel.Store.SP_Province_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Province_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Province_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Province_getElements" FunctionName="MyShopDbModel.Store.SP_Province_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Province_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Province_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Province_getElementsbyId" FunctionName="MyShopModel.Store.SP_Province_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Province_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Province_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Province_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Province_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Province_Update" FunctionName="MyShopModel.Store.SP_Province_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Shop_Create" FunctionName="MyShopModel.Store.SP_Shop_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Shop_deleteTemp" FunctionName="MyShopModel.Store.SP_Shop_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Shop_getElements" FunctionName="MyShopModel.Store.SP_Shop_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Province_Update" FunctionName="MyShopDbModel.Store.SP_Province_Update" />
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="MyShopDbModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="SP_Shop_Create" FunctionName="MyShopDbModel.Store.SP_Shop_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Shop_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Shop_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Shop_getElements" FunctionName="MyShopDbModel.Store.SP_Shop_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Shop_getElements_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Province_Id" ColumnName="Province_Id" />
-                <ScalarProperty Name="isDel" ColumnName="isDel" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Shop_getElementsbyId" FunctionName="MyShopModel.Store.SP_Shop_getElementsbyId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Shop_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Shop_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
@@ -1859,45 +2178,26 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Shop_Update" FunctionName="MyShopModel.Store.SP_Shop_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Support_Create" FunctionName="MyShopModel.Store.SP_Support_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Support_deleteTemp" FunctionName="MyShopModel.Store.SP_Support_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Support_getElements" FunctionName="MyShopModel.Store.SP_Support_getElements">
+          <FunctionImportMapping FunctionImportName="SP_Shop_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Shop_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Support_getElements_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Shop_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Nick" ColumnName="Nick" />
-                <ScalarProperty Name="Order" ColumnName="Order" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Province_Id" ColumnName="Province_Id" />
                 <ScalarProperty Name="isDel" ColumnName="isDel" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Support_getElementsbyId" FunctionName="MyShopModel.Store.SP_Support_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Shop_Update" FunctionName="MyShopDbModel.Store.SP_Shop_Update" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="MyShopDbModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="SP_Users_Create" FunctionName="MyShopDbModel.Store.SP_Users_Create" />
+          <FunctionImportMapping FunctionImportName="SP_Users_deleteTemp" FunctionName="MyShopDbModel.Store.SP_Users_deleteTemp" />
+          <FunctionImportMapping FunctionImportName="SP_Users_getElements" FunctionName="MyShopDbModel.Store.SP_Users_getElements">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Support_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Users_getElements_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Nick" ColumnName="Nick" />
-                <ScalarProperty Name="Order" ColumnName="Order" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="isDel" ColumnName="isDel" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Support_Update" FunctionName="MyShopModel.Store.SP_Support_Update" />
-          <FunctionImportMapping FunctionImportName="SP_Users_Create" FunctionName="MyShopModel.Store.SP_Users_Create" />
-          <FunctionImportMapping FunctionImportName="SP_Users_deleteTemp" FunctionName="MyShopModel.Store.SP_Users_deleteTemp" />
-          <FunctionImportMapping FunctionImportName="SP_Users_getElements" FunctionName="MyShopModel.Store.SP_Users_getElements">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Users_getElements_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Rule" ColumnName="Rule" />
@@ -1906,11 +2206,10 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Users_getElementsbyId" FunctionName="MyShopModel.Store.SP_Users_getElementsbyId">
+          <FunctionImportMapping FunctionImportName="SP_Users_getElementsbyId" FunctionName="MyShopDbModel.Store.SP_Users_getElementsbyId">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MyShopModel.SP_Users_getElementsbyId_Result">
+              <ComplexTypeMapping TypeName="MyShopDbModel.SP_Users_getElementsbyId_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Rule" ColumnName="Rule" />
@@ -1919,7 +2218,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_Users_Update" FunctionName="MyShopModel.Store.SP_Users_Update" />
+          <FunctionImportMapping FunctionImportName="SP_Users_Update" FunctionName="MyShopDbModel.Store.SP_Users_Update" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

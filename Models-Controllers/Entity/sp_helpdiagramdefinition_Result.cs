@@ -11,14 +11,9 @@ namespace Models_Controllers.Entity
 {
     using System;
     
-    public partial class SP_Company_getElementsbyId_Result
+    public partial class sp_helpdiagramdefinition_Result
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Fax { get; set; }
-        public string Email { get; set; }
-        public Nullable<bool> isDel { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

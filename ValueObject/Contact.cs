@@ -12,11 +12,8 @@ namespace ValueObject
     public class Contact
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Company { get; set; }
-        public string Address { get; set; }
-        public string Tel { get; set; }
-        public string Mal { get; set; }
+        public int Customer_Id { get; set; }
+        public string Summary { get; set; }
         public string Detail { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<bool> isDel { get; set; }

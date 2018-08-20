@@ -17,6 +17,7 @@ namespace Models_Controllers.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GroupProduct()
         {
+            this.Menus = new HashSet<Menu>();
             this.Products = new HashSet<Product>();
         }
     
@@ -28,6 +29,8 @@ namespace Models_Controllers.Entity
         public Nullable<int> Status { get; set; }
         public Nullable<bool> isDel { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Menu> Menus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
     }

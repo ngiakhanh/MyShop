@@ -27,6 +27,7 @@ namespace Models_Controllers.Entity
         public Nullable<int> Status { get; set; }
         public Nullable<bool> isDel { get; set; }
     
+        public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }

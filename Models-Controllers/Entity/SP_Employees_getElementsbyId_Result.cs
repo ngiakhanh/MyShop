@@ -10,16 +10,17 @@
 namespace Models_Controllers.Entity
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Support
+    public partial class SP_Employees_getElementsbyId_Result
     {
         public int Id { get; set; }
+        public int User_Id { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
         public string Tel { get; set; }
         public Nullable<int> Type { get; set; }
         public string Nick { get; set; }
-        public Nullable<int> Order { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<bool> isDel { get; set; }
     }

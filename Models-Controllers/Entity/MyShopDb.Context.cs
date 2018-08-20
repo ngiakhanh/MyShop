@@ -31,6 +31,7 @@ namespace Models_Controllers.Entity
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<GroupProduct> GroupProducts { get; set; }
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
@@ -38,11 +39,15 @@ namespace Models_Controllers.Entity
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
-        public virtual DbSet<Support> Supports { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
     
-        public virtual int SP_Advertise_Create(string name, string url, Nullable<int> width, Nullable<int> height, string link, Nullable<int> target, Nullable<int> position, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
+        public virtual int SP_Advertise_Create(Nullable<int> company, string name, string url, Nullable<int> width, Nullable<int> height, string link, Nullable<int> target, Nullable<int> position, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
         {
+            var companyParameter = company.HasValue ?
+                new ObjectParameter("Company", company) :
+                new ObjectParameter("Company", typeof(int));
+    
             var nameParameter = name != null ?
                 new ObjectParameter("Name", name) :
                 new ObjectParameter("Name", typeof(string));
@@ -83,7 +88,7 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Advertise_Create", nameParameter, urlParameter, widthParameter, heightParameter, linkParameter, targetParameter, positionParameter, orderParameter, statusParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Advertise_Create", companyParameter, nameParameter, urlParameter, widthParameter, heightParameter, linkParameter, targetParameter, positionParameter, orderParameter, statusParameter, isDelParameter);
         }
     
         public virtual int SP_Advertise_deleteTemp(Nullable<int> id)
@@ -109,11 +114,15 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Advertise_getElementsbyId_Result>("SP_Advertise_getElementsbyId", idParameter);
         }
     
-        public virtual int SP_Advertise_Update(Nullable<int> id, string name, string url, Nullable<int> width, Nullable<int> height, string link, Nullable<int> target, Nullable<int> position, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
+        public virtual int SP_Advertise_Update(Nullable<int> id, Nullable<int> company, string name, string url, Nullable<int> width, Nullable<int> height, string link, Nullable<int> target, Nullable<int> position, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
                 new ObjectParameter("Id", typeof(int));
+    
+            var companyParameter = company.HasValue ?
+                new ObjectParameter("Company", company) :
+                new ObjectParameter("Company", typeof(int));
     
             var nameParameter = name != null ?
                 new ObjectParameter("Name", name) :
@@ -155,10 +164,31 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Advertise_Update", idParameter, nameParameter, urlParameter, widthParameter, heightParameter, linkParameter, targetParameter, positionParameter, orderParameter, statusParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Advertise_Update", idParameter, companyParameter, nameParameter, urlParameter, widthParameter, heightParameter, linkParameter, targetParameter, positionParameter, orderParameter, statusParameter, isDelParameter);
         }
     
-        public virtual int SP_Company_Create(string name, string address, string phoneNumber, string fax, Nullable<bool> isDel)
+        public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_alterdiagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int SP_Company_Create(string name, string address, string phoneNumber, string fax, string email, Nullable<bool> isDel)
         {
             var nameParameter = name != null ?
                 new ObjectParameter("Name", name) :
@@ -176,11 +206,15 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("Fax", fax) :
                 new ObjectParameter("Fax", typeof(string));
     
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
             var isDelParameter = isDel.HasValue ?
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Company_Create", nameParameter, addressParameter, phoneNumberParameter, faxParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Company_Create", nameParameter, addressParameter, phoneNumberParameter, faxParameter, emailParameter, isDelParameter);
         }
     
         public virtual int SP_Company_deleteTemp(Nullable<int> id)
@@ -206,7 +240,7 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Company_getElementsbyId_Result>("SP_Company_getElementsbyId", idParameter);
         }
     
-        public virtual int SP_Company_Update(Nullable<int> id, string name, string address, string phoneNumber, string fax, Nullable<bool> isDel)
+        public virtual int SP_Company_Update(Nullable<int> id, string name, string address, string phoneNumber, string fax, string email, Nullable<bool> isDel)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
@@ -228,34 +262,26 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("Fax", fax) :
                 new ObjectParameter("Fax", typeof(string));
     
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
             var isDelParameter = isDel.HasValue ?
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Company_Update", idParameter, nameParameter, addressParameter, phoneNumberParameter, faxParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Company_Update", idParameter, nameParameter, addressParameter, phoneNumberParameter, faxParameter, emailParameter, isDelParameter);
         }
     
-        public virtual int SP_Contact_Create(string name, string company, string address, string tel, string mal, string detail, Nullable<System.DateTime> date, Nullable<bool> isDel)
+        public virtual int SP_Contact_Create(Nullable<int> customer, string summary, string detail, Nullable<System.DateTime> date, Nullable<bool> isDel)
         {
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
+            var customerParameter = customer.HasValue ?
+                new ObjectParameter("Customer", customer) :
+                new ObjectParameter("Customer", typeof(int));
     
-            var companyParameter = company != null ?
-                new ObjectParameter("Company", company) :
-                new ObjectParameter("Company", typeof(string));
-    
-            var addressParameter = address != null ?
-                new ObjectParameter("Address", address) :
-                new ObjectParameter("Address", typeof(string));
-    
-            var telParameter = tel != null ?
-                new ObjectParameter("Tel", tel) :
-                new ObjectParameter("Tel", typeof(string));
-    
-            var malParameter = mal != null ?
-                new ObjectParameter("Mal", mal) :
-                new ObjectParameter("Mal", typeof(string));
+            var summaryParameter = summary != null ?
+                new ObjectParameter("Summary", summary) :
+                new ObjectParameter("Summary", typeof(string));
     
             var detailParameter = detail != null ?
                 new ObjectParameter("Detail", detail) :
@@ -269,7 +295,7 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Contact_Create", nameParameter, companyParameter, addressParameter, telParameter, malParameter, detailParameter, dateParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Contact_Create", customerParameter, summaryParameter, detailParameter, dateParameter, isDelParameter);
         }
     
         public virtual int SP_Contact_deleteTemp(Nullable<int> id)
@@ -295,31 +321,19 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Contact_getElementsbyId_Result>("SP_Contact_getElementsbyId", idParameter);
         }
     
-        public virtual int SP_Contact_Update(Nullable<int> id, string name, string company, string address, string tel, string mal, string detail, Nullable<System.DateTime> date, Nullable<bool> isDel)
+        public virtual int SP_Contact_Update(Nullable<int> id, Nullable<int> customer, string summary, string detail, Nullable<System.DateTime> date, Nullable<bool> isDel)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
                 new ObjectParameter("Id", typeof(int));
     
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
+            var customerParameter = customer.HasValue ?
+                new ObjectParameter("Customer", customer) :
+                new ObjectParameter("Customer", typeof(int));
     
-            var companyParameter = company != null ?
-                new ObjectParameter("Company", company) :
-                new ObjectParameter("Company", typeof(string));
-    
-            var addressParameter = address != null ?
-                new ObjectParameter("Address", address) :
-                new ObjectParameter("Address", typeof(string));
-    
-            var telParameter = tel != null ?
-                new ObjectParameter("Tel", tel) :
-                new ObjectParameter("Tel", typeof(string));
-    
-            var malParameter = mal != null ?
-                new ObjectParameter("Mal", mal) :
-                new ObjectParameter("Mal", typeof(string));
+            var summaryParameter = summary != null ?
+                new ObjectParameter("Summary", summary) :
+                new ObjectParameter("Summary", typeof(string));
     
             var detailParameter = detail != null ?
                 new ObjectParameter("Detail", detail) :
@@ -333,7 +347,28 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Contact_Update", idParameter, nameParameter, companyParameter, addressParameter, telParameter, malParameter, detailParameter, dateParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Contact_Update", idParameter, customerParameter, summaryParameter, detailParameter, dateParameter, isDelParameter);
+        }
+    
+        public virtual int sp_creatediagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
         }
     
         public virtual int SP_Customers_Create(string name, Nullable<System.DateTime> birthDay, string province, string address, string tel, string email, Nullable<bool> isDel)
@@ -429,6 +464,128 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Customers_Update", idParameter, nameParameter, birthDayParameter, provinceParameter, addressParameter, telParameter, emailParameter, isDelParameter);
         }
     
+        public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_dropdiagram", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual int SP_Employees_Create(Nullable<int> user, string name, string email, string address, string tel, Nullable<int> type, string nick, Nullable<int> status, Nullable<bool> isDel)
+        {
+            var userParameter = user.HasValue ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("Address", address) :
+                new ObjectParameter("Address", typeof(string));
+    
+            var telParameter = tel != null ?
+                new ObjectParameter("Tel", tel) :
+                new ObjectParameter("Tel", typeof(string));
+    
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(int));
+    
+            var nickParameter = nick != null ?
+                new ObjectParameter("Nick", nick) :
+                new ObjectParameter("Nick", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(int));
+    
+            var isDelParameter = isDel.HasValue ?
+                new ObjectParameter("isDel", isDel) :
+                new ObjectParameter("isDel", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Employees_Create", userParameter, nameParameter, emailParameter, addressParameter, telParameter, typeParameter, nickParameter, statusParameter, isDelParameter);
+        }
+    
+        public virtual int SP_Employees_deleteTemp(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Employees_deleteTemp", idParameter);
+        }
+    
+        public virtual ObjectResult<SP_Employees_getElements_Result> SP_Employees_getElements()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Employees_getElements_Result>("SP_Employees_getElements");
+        }
+    
+        public virtual ObjectResult<SP_Employees_getElementsbyId_Result> SP_Employees_getElementsbyId(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Employees_getElementsbyId_Result>("SP_Employees_getElementsbyId", idParameter);
+        }
+    
+        public virtual int SP_Employees_Update(Nullable<int> id, Nullable<int> user, string name, string email, string address, string tel, Nullable<int> type, string nick, Nullable<int> status, Nullable<bool> isDel)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var userParameter = user.HasValue ?
+                new ObjectParameter("User", user) :
+                new ObjectParameter("User", typeof(int));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var addressParameter = address != null ?
+                new ObjectParameter("Address", address) :
+                new ObjectParameter("Address", typeof(string));
+    
+            var telParameter = tel != null ?
+                new ObjectParameter("Tel", tel) :
+                new ObjectParameter("Tel", typeof(string));
+    
+            var typeParameter = type.HasValue ?
+                new ObjectParameter("Type", type) :
+                new ObjectParameter("Type", typeof(int));
+    
+            var nickParameter = nick != null ?
+                new ObjectParameter("Nick", nick) :
+                new ObjectParameter("Nick", typeof(string));
+    
+            var statusParameter = status.HasValue ?
+                new ObjectParameter("Status", status) :
+                new ObjectParameter("Status", typeof(int));
+    
+            var isDelParameter = isDel.HasValue ?
+                new ObjectParameter("isDel", isDel) :
+                new ObjectParameter("isDel", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Employees_Update", idParameter, userParameter, nameParameter, emailParameter, addressParameter, telParameter, typeParameter, nickParameter, statusParameter, isDelParameter);
+        }
+    
         public virtual int SP_GroupProduct_Create(string name, string content, string images, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
         {
             var nameParameter = name != null ?
@@ -512,6 +669,32 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_GroupProduct_Update", idParameter, nameParameter, contentParameter, imagesParameter, orderParameter, statusParameter, isDelParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagramdefinition_Result> sp_helpdiagramdefinition(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagramdefinition_Result>("sp_helpdiagramdefinition", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagrams_Result> sp_helpdiagrams(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
         }
     
         public virtual int SP_Menu_Create(string name, string link, Nullable<int> order, Nullable<int> parentId, Nullable<bool> isDel)
@@ -907,6 +1090,23 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Province_Update", idParameter, nameParameter, isDelParameter);
         }
     
+        public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var new_diagramnameParameter = new_diagramname != null ?
+                new ObjectParameter("new_diagramname", new_diagramname) :
+                new ObjectParameter("new_diagramname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
+        }
+    
         public virtual int SP_Shop_Create(string name, string address, string tel, Nullable<int> province_Id, Nullable<bool> isDel)
         {
             var nameParameter = name != null ?
@@ -984,105 +1184,13 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Shop_Update", idParameter, nameParameter, addressParameter, telParameter, province_IdParameter, isDelParameter);
         }
     
-        public virtual int SP_Support_Create(string name, string tel, Nullable<int> type, string nick, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
+        public virtual int sp_upgraddiagrams()
         {
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
-    
-            var telParameter = tel != null ?
-                new ObjectParameter("Tel", tel) :
-                new ObjectParameter("Tel", typeof(string));
-    
-            var typeParameter = type.HasValue ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(int));
-    
-            var nickParameter = nick != null ?
-                new ObjectParameter("Nick", nick) :
-                new ObjectParameter("Nick", typeof(string));
-    
-            var orderParameter = order.HasValue ?
-                new ObjectParameter("Order", order) :
-                new ObjectParameter("Order", typeof(int));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(int));
-    
-            var isDelParameter = isDel.HasValue ?
-                new ObjectParameter("isDel", isDel) :
-                new ObjectParameter("isDel", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Support_Create", nameParameter, telParameter, typeParameter, nickParameter, orderParameter, statusParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
     
-        public virtual int SP_Support_deleteTemp(Nullable<int> id)
+        public virtual int SP_Users_Create(string userName, string password, Nullable<int> rule, Nullable<int> status, Nullable<bool> isDel)
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Support_deleteTemp", idParameter);
-        }
-    
-        public virtual ObjectResult<SP_Support_getElements_Result> SP_Support_getElements()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Support_getElements_Result>("SP_Support_getElements");
-        }
-    
-        public virtual ObjectResult<SP_Support_getElementsbyId_Result> SP_Support_getElementsbyId(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Support_getElementsbyId_Result>("SP_Support_getElementsbyId", idParameter);
-        }
-    
-        public virtual int SP_Support_Update(Nullable<int> id, string name, string tel, Nullable<int> type, string nick, Nullable<int> order, Nullable<int> status, Nullable<bool> isDel)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
-    
-            var telParameter = tel != null ?
-                new ObjectParameter("Tel", tel) :
-                new ObjectParameter("Tel", typeof(string));
-    
-            var typeParameter = type.HasValue ?
-                new ObjectParameter("Type", type) :
-                new ObjectParameter("Type", typeof(int));
-    
-            var nickParameter = nick != null ?
-                new ObjectParameter("Nick", nick) :
-                new ObjectParameter("Nick", typeof(string));
-    
-            var orderParameter = order.HasValue ?
-                new ObjectParameter("Order", order) :
-                new ObjectParameter("Order", typeof(int));
-    
-            var statusParameter = status.HasValue ?
-                new ObjectParameter("Status", status) :
-                new ObjectParameter("Status", typeof(int));
-    
-            var isDelParameter = isDel.HasValue ?
-                new ObjectParameter("isDel", isDel) :
-                new ObjectParameter("isDel", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Support_Update", idParameter, nameParameter, telParameter, typeParameter, nickParameter, orderParameter, statusParameter, isDelParameter);
-        }
-    
-        public virtual int SP_Users_Create(string name, string userName, string password, Nullable<int> rule, Nullable<int> status, Nullable<bool> isDel)
-        {
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
-    
             var userNameParameter = userName != null ?
                 new ObjectParameter("UserName", userName) :
                 new ObjectParameter("UserName", typeof(string));
@@ -1103,7 +1211,7 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Users_Create", nameParameter, userNameParameter, passwordParameter, ruleParameter, statusParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Users_Create", userNameParameter, passwordParameter, ruleParameter, statusParameter, isDelParameter);
         }
     
         public virtual int SP_Users_deleteTemp(Nullable<int> id)
@@ -1129,15 +1237,11 @@ namespace Models_Controllers.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Users_getElementsbyId_Result>("SP_Users_getElementsbyId", idParameter);
         }
     
-        public virtual int SP_Users_Update(Nullable<int> id, string name, string userName, string password, Nullable<int> rule, Nullable<int> status, Nullable<bool> isDel)
+        public virtual int SP_Users_Update(Nullable<int> id, string userName, string password, Nullable<int> rule, Nullable<int> status, Nullable<bool> isDel)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
                 new ObjectParameter("Id", typeof(int));
-    
-            var nameParameter = name != null ?
-                new ObjectParameter("Name", name) :
-                new ObjectParameter("Name", typeof(string));
     
             var userNameParameter = userName != null ?
                 new ObjectParameter("UserName", userName) :
@@ -1159,7 +1263,7 @@ namespace Models_Controllers.Entity
                 new ObjectParameter("isDel", isDel) :
                 new ObjectParameter("isDel", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Users_Update", idParameter, nameParameter, userNameParameter, passwordParameter, ruleParameter, statusParameter, isDelParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Users_Update", idParameter, userNameParameter, passwordParameter, ruleParameter, statusParameter, isDelParameter);
         }
     }
 }

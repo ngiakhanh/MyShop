@@ -66,6 +66,9 @@
     <Compile Include="Entity\Customer.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entity\Employee.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity\GroupProduct.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
@@ -126,10 +129,22 @@
     <Compile Include="Entity\SP_Customers_getElements_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entity\SP_Employees_getElementsbyId_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SP_Employees_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entity\SP_GroupProduct_getElementsbyId_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\SP_GroupProduct_getElements_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>MyShopDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\sp_helpdiagrams_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\SP_Menu_getElementsbyId_Result.cs">
@@ -168,19 +183,13 @@
     <Compile Include="Entity\SP_Shop_getElements_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entity\SP_Support_getElementsbyId_Result.cs">
-      <DependentUpon>MyShopDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\SP_Support_getElements_Result.cs">
-      <DependentUpon>MyShopDb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Entity\SP_Users_getElementsbyId_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\SP_Users_getElements_Result.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entity\Support.cs">
+    <Compile Include="Entity\sysdiagram.cs">
       <DependentUpon>MyShopDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\User.cs">
