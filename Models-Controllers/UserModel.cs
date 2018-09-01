@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models_Controllers.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +8,15 @@ using ValueObject;
 
 namespace Models_Controllers
 {
-    class UserModel:BaseModel<User>
+    public class UserModel:BaseModel<ValueObject.User>
     {
-        public override List<User> getElements()
+        public override List<ValueObject.User> getElements()
         {
             var listData = dbContext.SP_Users_getElements();
-            List<User> listChosen = new List<User>();
+            List<ValueObject.User> listChosen = new List<ValueObject.User>();
             foreach (var item in listData)
             {
-                User obj = new User
+                ValueObject.User obj = new ValueObject.User
                 {
                     Id = item.Id,
                     UserName = item.UserName,
@@ -28,12 +29,12 @@ namespace Models_Controllers
             }
             return listChosen;
         }
-        public override User getElementById(int id)
+        public override ValueObject.User getElementById(int id)
         {
             var listData = dbContext.SP_Users_getElementsbyId(id);
             foreach (var item in listData)
             {
-                User obj = new User
+                ValueObject.User obj = new ValueObject.User
                 {
                     Id = item.Id,
                     UserName = item.UserName,
@@ -46,7 +47,7 @@ namespace Models_Controllers
             }
             return null;
         }
-        public override bool create(User obj)
+        public override bool create(ValueObject.User obj)
         {
             try
             {
@@ -57,7 +58,7 @@ namespace Models_Controllers
                 return false;
             }
         }
-        public override bool update(User obj)
+        public override bool update(ValueObject.User obj)
         {
             try
             {
@@ -78,6 +79,27 @@ namespace Models_Controllers
             {
                 return false;
             }
+        }
+
+        public ValueObject.User checkLogin(string username, string password)
+        {
+            var user = (from s in dbContext.Users
+                        where s.UserName == username && s.Password == password
+                        select s).ToList();
+            if (user.Count == 1)
+            {
+                ValueObject.User obj = new ValueObject.User
+                {
+                    Id = user[0].Id,
+                    UserName = user[0].UserName,
+                    Password = user[0].Password,
+                    Rule = user[0].Rule,
+                    Status = user[0].Status,
+                    isDel = user[0].isDel
+                };
+                return obj;
+            }
+            return null;
         }
     }
 }
