@@ -1,10 +1,6 @@
-﻿using Models_Controllers.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ValueObject;
 
 namespace Models_Controllers
 {
@@ -100,6 +96,49 @@ namespace Models_Controllers
                 return obj;
             }
             return null;
+        }
+
+        public int maxPage(string query, int pageSize)
+        {
+            int total = (from s in dbContext.Users
+                         where s.UserName.StartsWith(query)
+                         orderby s.UserName
+                         select s).Count();
+            int maxPage = (int) Math.Ceiling((decimal)(total / pageSize));
+            return maxPage;
+
+        }
+
+        public List<ValueObject.User> searchpageList(string query, int pageSize, int currentPage)
+        {
+            int total = (from s in dbContext.Users
+                         where s.UserName.StartsWith(query)
+                         orderby s.UserName
+                         select s).Count(); 
+            int skip = pageSize * (currentPage - 1);
+
+            if (skip >= total) { return null; }
+
+            var chosen = (from s in dbContext.Users
+                          where s.UserName.StartsWith(query)
+                          orderby s.UserName
+                          select s).Skip(skip).Take(pageSize).ToList();
+
+            List<ValueObject.User> listChosen = new List<ValueObject.User>();
+            foreach (var item in chosen)
+            {
+                ValueObject.User obj = new ValueObject.User
+                {
+                    Id = item.Id,
+                    UserName = item.UserName,
+                    Password = item.Password,
+                    Rule = item.Rule,
+                    Status = item.Status,
+                    isDel = item.isDel
+                };
+                listChosen.Add(obj);
+            }
+            return listChosen;
         }
     }
 }

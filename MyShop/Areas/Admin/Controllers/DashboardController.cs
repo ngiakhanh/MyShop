@@ -43,5 +43,13 @@ namespace MyShop.Areas.Admin.Controllers
         {
             return Json(new Models_Controllers.UserModel().delete(id));
         }
+
+        [HttpGet]
+        public ActionResult LoginSearch(string username, int currentPage=1)
+        {
+            ViewBag.maxPage = new Models_Controllers.UserModel().maxPage(username, CommonConstants.PAGESIZE);
+            ViewBag.query = username;
+            return View(new Models_Controllers.UserModel().searchpageList(username, CommonConstants.PAGESIZE, currentPage));
+        }
     }
 }

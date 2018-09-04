@@ -40,6 +40,5 @@ namespace MyShop.Areas.Admin.Controllers
 
             return View();
         }
-
     }
 }
